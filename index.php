@@ -5,6 +5,9 @@
 // Define a constant to ensure pages are only loaded through this index file.
 define("INDEXED", "1");
 
+$messages = array();
+
+// Load up the config.
 require "core/default_config.php";
 if (file_exists("config/config.php")) require "config/config.php";
 else $config = array();
@@ -20,23 +23,35 @@ if (!session_id()) {
     session_start();
 }
 
+// These need to be set explicitly to avoid warnings later on.
 if (!isset($_SESSION["signed_in"])) $_SESSION["signed_in"] = false;
 if (!isset($_SESSION["role"])) $_SESSION["role"] = "Guest";
 
 // Check the user's role and ensure their session reflects it accordingly.
-if ($config["installed"] and ($_SESSION["signed_in"] == true)) {
-    $rolecheck = $db->query("SELECT role FROM users WHERE userid='" . $_SESSION["userid"] . "'");
-    while ($r = $rolecheck->fetch_assoc()) {
-        if (!$r["role"] == $_SESSION["role"]) {
-            $_SESSION["role"] == $r["role"];
-        }
+if ($config["installed"] and $_SESSION["signed_in"]) {
+    $rolecheck = $db->query("SELECT `role`, `verified` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
+    $rc = $rolecheck->fetch_assoc();
+    // Probably will remove this later TODO
+    if ($rc["role"] != $_SESSION["role"]) {
+        $_SESSION["role"] = $rc["role"];
     }
+    // Suspended and unverified users are not allowed to be logged in.
+    if (($rc["role"] == "Suspended") or (!$rc["verified"])) {
+        logout();
+    }
+}
+
+// Log out any users if the forum isn't installed.
+if (!$config["installed"] and $_SESSION["signed_in"]) {
+    logout();
 }
 
 // Process the URL.
 $url = explode("/", ($_GET["url"] ?? ""));
 
 $pages = array("signup", "login", "newcategory", "newthread", "category", "thread", "userlist", "user", "settings", "panel");
+
+$title = "";
 
 // Based on the URL, serve the user with a corresponding page.
 if (!$config["installed"]) require "core/install.php";
@@ -45,6 +60,7 @@ elseif (in_array($url[0], $pages)) require "controllers/{$url[0]}.php";
 elseif ($url[0] == "logout") logout();
 else {
     http_response_code(404);
+    $title = "Not found";
     message("Error: requested page not found.");
     require "controllers/homepage.php";
 }

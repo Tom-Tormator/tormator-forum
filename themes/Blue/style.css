@@ -11,7 +11,7 @@ body {
  margin: auto;
 }
 #header {
- background: white;
+ background: linear-gradient(#b0b1ff, #5558ff, #5558ff);
  border: 1px solid black;
  border-top: none;
  border-bottom: none;
@@ -37,6 +37,14 @@ body {
 #userbar {
  float: right;
 }
+#userbar a {
+ text-decoration: none;
+ color: #0000ee;
+}
+#userbar a:hover {
+ text-decoration: underline;
+ color: #5555ee;
+}
 #footer {
  border-bottom-left-radius: 6px;
  border-bottom-right-radius: 6px;
@@ -49,8 +57,19 @@ body {
  width: 100%;
  box-sizing: border-box;
 }
+.form {
+ display: grid;
+ grid-template-columns: auto 1fr;
+ max-width: 50%;
+ gap: 4px;
+}
+.form label {
+ text-align: right;
+}
+.form input[type='submit'], .form select {
+ width: fit-content;
+}
 button {
- background: linear-gradient(lightgrey, lightblue);
  border: 1px solid gray;
  border-radius: 3px;
 }
@@ -62,11 +81,47 @@ select {
  border: 1px solid gray;
  border-radius: 3px;
 }
+table {
+ border-collapse: separate;
+ width: 100%;
+ border: 1px solid navy;
+ border-radius: 8px;
+}
+table a {
+ color: #000;
+}
+table a:hover {
+ color:#373737;
+ text-decoration: none;
+}
+th {
+ background-color: blue;
+ color: #F0F0F0;
+ border: 1px solid black;
+ border-radius: 6px;
+}
+td {
+ padding: 5px;
+ border: 1px solid black;
+ border-radius: 8px;
+}
+#messages {
+ display: grid;
+ gap: 2px;
+}
 .message {
  border: 1px solid black;
  border-radius: 4px;
  background: yellow;
  padding: 5px;
+}
+.message a {
+ text-decoration: none;
+ color: #0000ee;
+}
+.message a:hover {
+ text-decoration: underline;
+ color: #5555ee;
 }
 
 /* Pagination styles. */
@@ -110,7 +165,7 @@ select {
 }
 .paginationleft font {
  background: linear-gradient(lightgray, gray);
- border: 1px solid #032472;
+ border: 1px solid black;
  border-radius: 4px;
  color: black;
  padding: 3px;
@@ -118,7 +173,7 @@ select {
 }
 .paginationright font {
  background: linear-gradient(lightgray, gray);
- border: 1px solid #032472;
+ border: 1px solid black;
  border-radius: 4px;
  color: black;
  font-family: Arial;
@@ -126,40 +181,17 @@ select {
  text-decoration: none;
 }
 
-/* Table styles. */
-table {
- border-collapse: separate;
- width: 100%;
- border: 1px solid navy;
- border-radius: 8px;
-}
-table a {
- color: #000;
-}
-table a:hover {
- color:#373737;
- text-decoration: none;
-}
-th {
- background-color: blue;
- color: #F0F0F0;
- border: 1px solid black;
- border-radius: 6px;
-}
-td {
- padding: 5px;
- border: 1px solid black;
- border-radius: 8px;
-}
-
 /* Menu styles. */
 .item {
- background: linear-gradient(#0E1359, blue);
+ background: linear-gradient(blue, #0E1359);
  border: 1px solid #032472;
  border-radius: 4px;
- color: #FFF;
+ color: white;
  padding: 2px 4px;
  text-decoration: none;
+}
+.item:hover {
+ text-decoration: underline;
 }
 .categories {
  display: grid;
@@ -186,10 +218,6 @@ td {
 }
 .post-content {
  padding: 30px;
-}
-textarea {
- width: 500px;
- height: 200px;
 }
 
 /* Thread styles. */
@@ -222,16 +250,10 @@ textarea {
  padding: 8px;
  background: gray;
 }
-.threadbutton {
- background: linear-gradient(#00728B, blue);
- border: 1px solid black;
- border-radius: 4px;
- color: white;
- display: inline;
- padding: 4px;
- text-decoration: none;
+.threadButtons {
  float: right;
- margin-left: 2px;
+ display: flex;
+ gap: 2px;
 }
 .locked {
  background: gray;

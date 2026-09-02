@@ -74,7 +74,7 @@ if ($_SESSION["role"] == "Administrator") {
     echo "</select><input type='submit' value='Change role'></form></small></div>";
 }
 else {
-    echo "<div class='usertop' postcolor='" . htmlspecialchars($user["color"]) . "'><b>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</b> <small>" . $user["role"] . "</small></div>";
+    echo "<div class='usertop' style='background: #" . $user["color"] . ";'><b>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</b> <small>" . $user["role"] . "</small></div>";
 }
 
 $posts_query = $db->query("SELECT 1 FROM `posts` WHERE `user`='" . $db->real_escape_string($url[1]) . "'");

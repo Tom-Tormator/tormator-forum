@@ -1,11 +1,11 @@
 <?php
 // thread.php
-// Shows the inside of a thread and allows users to post.
+// Shows the posts in a thread and allows users to post.
 
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
-require "views/header.php";
+$display = true;
 
 // Get the thread's information.
 $thread_query = $db->query("SELECT * FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
@@ -13,9 +13,15 @@ $thread = $thread_query->fetch_assoc();
 
 if ($thread_query->num_rows < 1) {
     message("The specified thread doesn't exist.");
-    require "views/footer.php";
+    $display = false;
+    require "views/thread.php";
     exit();
 }
+
+$title = htmlspecialchars($thread["title"], ENT_NOQUOTES);
+
+$posts_query = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $thread["threadid"] . "'");
+$posts = $posts_query->num_rows;
 
 // Find out what page we're on.
 if (isset($url[2]) and is_numeric($url[2])) {
@@ -27,7 +33,7 @@ else {
 }
 	
 // Important details for sorting the thread into pages.
-$numPosts = $thread["posts"];
+$numPosts = $posts;
 $pages = ceil($numPosts / $config["postsPerPage"]);
 
 // Calculate the offset for the posts query.
@@ -37,11 +43,12 @@ $posts_query = $db->query("SELECT * FROM `posts` WHERE `thread`='" . $db->real_e
 
 if ($posts_query->num_rows < 1) {
     message("There are no posts in this thread.");
-    require "views/footer.php";
+    $display = false;
+    require "views/thread.php";
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!$_SESSION["signed_in"]) {
         message("You must be signed in for any action within a thread.");
     }
@@ -208,130 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 
-echo '</br><a class="item" href="/category/' . $thread["category"] . '/">Back to category</a>';
-if (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator")) {
-    echo '<form style="display:inline;" action="" method="post"><button name="deletethread" class="threadbutton" value="' . $url[1] . '">Delete thread</button></form>';
-    if ($thread["locked"]) {
-        echo '<form style="display:inline;" action="" method="post"><button name="unlockthread" class="threadbutton" value="' . $url[1] . '">Unlock thread</button></form>';
-    }
-    else {
-        echo '<form style="display:inline;" action="" method="post"><button name="lockthread" class="threadbutton" value="' . $url[1] . '">Lock thread</button></form>';
-    }
-    if ($thread["sticky"]) {
-        echo '<form style="display:inline;" action="" method="post"><button name="unstickythread" class="threadbutton" value="' . $url[1] . '">Unsticky thread</button></form>';
-    }
-    else {
-        echo '<form style="display:inline;" action="" method="post"><button name="stickythread" class="threadbutton" value="' . $url[1] . '">Sticky thread</button></form>';
-    }
-}
-echo '<h2>Posts in ' . htmlspecialchars($thread["title"]) . '</h2>';
-
-if ($thread["locked"] and $thread["sticky"]) {
-    echo '<font class="sticky">Sticky</font> <font class="locked">Locked</font></br></br>';
-}
-elseif ($thread["locked"]) {
-    echo '<font class="locked">Locked</font></br></br>';
-}
-elseif ($thread["sticky"]) {
-    echo '<font class="sticky">Sticky</font></br></br>';
-}
-
-echo "<div class='paginationleft'>";
-	
-if ($currentPage == 1) {
-    echo "<font color=white>First page</font> <font color=white>Previous page</font>";
-}
-else {
-    echo "<a href='/thread/" . $url[1] . "/1/'>First page</a> <a href='/thread/" . $url[1] . "/" . ($currentPage - 1) . "/'>Previous page</a>";
-}
-	
-echo "</div><div class='paginationright'>";
-	
-if ($currentPage == $pages) {
-    echo "<font color=white>Next page</font> <font color=white>Last page</font>";
-}
-else {
-    echo "<a href='/thread/" . $url[1] . "/" . ($currentPage + 1) . "/'>Next page</a> <a href='/thread/" . $url[1] . "/" . $pages ."/'>Last page</a>";
-}
-	
-echo "</div></br>";
-				
-while ($row = $posts_query->fetch_assoc()) {
-    $userinfo = $db->query("SELECT * FROM users WHERE userid='" . $row["user"] . "'");
-		
-	while($u = $userinfo->fetch_assoc())
-	{
-		if (isset($row["deletedby"]))
-		{
-			$hider = $db->query("SELECT * FROM users WHERE userid='" . $row["deletedby"] . "'");
-			
-			while ($h = $hider->fetch_assoc())
-			{
-				echo '<div class="hiddenpost"><b><a href="/user/' . $u["userid"] . '/">' . htmlspecialchars($u["username"]) . "</a></b> <a title='" . date('m-d-Y h:i:s A', $row["timestamp"]) . "'>" . relativeTime($row["timestamp"]) . '</a> (hidden by <a href="/user/' . $row["deletedby"] . '/">' . $h["username"] . '</a>)';
-				if (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator") or ($u["userid"] == $_SESSION["userid"]) && (!($_SESSION["role"] == "Suspended")) && ($_SESSION['signed_in'] == true))
-				{
-					echo '<form class="postc" action="" method="post"><button name="restore" value="' . $row["postid"] . '">Restore</button></form>';
-				}
-				echo '</div></br>';
-			}
-		}
-		
-		else {
-			echo '<div postcolor="' . $u["color"] . '" class="thread">';
-			echo '<b><a href="/user/' . $u["userid"] . '/">' . htmlspecialchars($u["username"]) . "</a></b> <a title='" . date('m-d-Y h:i:s A', $row["timestamp"]) . "'>" . relativeTime($row["timestamp"]) . "</a>";
-			if ($_SESSION['signed_in'] and ((($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))
-			or ($u["userid"] == $_SESSION["userid"]))) {
-				echo '<form class="postc" action="" method="post"><button name="delete" value="' . $row["postid"] . '">Delete</button></form>';
-				echo '<form class="postc" action="" method="post"><button name="hide" value="' . $row["postid"] . '">Hide</button></form>';
-				echo '<form class="postc" action="" method="post"><button name="edit" value="' . $row["postid"] . '">Edit</button></form>';
-			}
-			
-			if (isset($_POST["edit"]) && ($_POST["edit"] == $row["postid"]) && (!($_SESSION["role"] == "Suspended")) && ($_SESSION['signed_in'] == true)) {
-				echo '</div><form method="post" action="">';				
-				echo '<textarea name="saveedit" />' . ($row["content"]) . '</textarea><textarea style="display:none;" name="saveeditpostid">' . $row["postid"] . '</textarea></br><input type="submit" value="Save edit"></form></br>';
-			}
-			
-			else {
-				echo '</div><div class="threadcontent">' . htmlspecialchars($row["content"]) . '</div></br>';
-			}
-		}
-	}
-}
-
-echo "<div class='paginationleft'>";
-	
-if ($currentPage == 1) {
-    echo "<font color=white>First page</font> <font color=white>Previous page</font>";
-}
-else {
-    echo "<a href='/thread/" . $url[1] . "/1/'>First page</a> <a href='/thread/" . $url[1] . "/" . ($currentPage - 1) . "/'>Previous page</a>";
-}
-	
-echo "</div><div class='paginationright'>";
-	
-if ($currentPage == $pages) {
-    echo "<font color=white>Next page</font> <font color=white>Last page</font>";
-}
-else {
-    echo "<a href='/thread/" . $url[1] . "/" . ($currentPage + 1) . "/'>Next page</a> <a href='/thread/" . $url[1] . "/" . $pages ."/'>Last page</a>";
-}
-	
-echo "</div></br>";
-
-if (!$_SESSION["signed_in"]) {
-    message("You must be signed in to post.");
-}
-elseif ((!$thread["locked"]) or (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
-    echo("<form method='post'>
-    Content:<br><textarea name='content'>" . htmlspecialchars($_POST["content"] ?? "", ENT_NOQUOTES) . "</textarea></br>
-    <input type='submit' value='Submit post'>
-    </form>");
-}
-else {
-    message("Sorry, this thread is locked. Only moderators and administrators can post in it.");
-}
-
-require "views/footer.php";
+require "views/thread.php";
 
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {

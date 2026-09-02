@@ -38,6 +38,7 @@ $default_config = array(
     "maxCats" => 20,
     // Maximum number of characters allowable in a thread or category title.
     "maxCharsPerTitle" => 35,
+    "minPasswordLength" => 12
 );
 
 ?>
