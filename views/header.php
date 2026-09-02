@@ -3,20 +3,18 @@
 // Placed at the top of every page on the forum.
 
 // Only load the page if it's being loaded through the index.php file.
-if (!defined("INDEXED")) exit;
-
-?>
-
-<!DOCTYPE html>
+if (!defined("INDEXED")) exit; ?><!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title><?php echo $config["forumName"]; ?></title>
-	<link rel="stylesheet" href="/../themes/Blue/style.css" type="text/css">
+ <meta charset="UTF-8">
+ <title><?php echo $config["forumName"]; ?></title>
+ <link rel="stylesheet" href="/themes/<?php echo($config["theme"]); ?>/style.css">
 </head>
 <body>
-<h1><?php echo $config["forumName"]; ?></h1>
 	<div id="wrapper">
+	 <div id="header">
+	  <h1><?php echo(htmlspecialchars($config["forumName"], ENT_NOQUOTES)); ?></h1>
+	  </div>
 	<div id="menu">
 		<?php
 			echo '<a class="item" href="/">Home</a> ';
@@ -25,22 +23,22 @@ if (!defined("INDEXED")) exit;
 			echo '<a class="item" href="/settings/">Settings</a> ';
 			echo '<a class="item" href="/newthread/">Create a thread</a> ';
 		
-		if(isset($_SESSION['signed_in']) && $_SESSION['signed_in'] == true && $_SESSION["role"] == "Administrator")
+		if ($_SESSION['signed_in'] and ($_SESSION["role"] == "Administrator"))
 		{
 			echo '<a class="item" href="/newcategory/">Create a category</a> ';
 			echo '<a class="item" href="/panel/">Admin Panel</a> ';
 		}
 		
 
-		if(isset($_SESSION['signed_in']) && $_SESSION['signed_in'] == true)
+		if ($_SESSION['signed_in'])
 		{
 			echo '<a class="item" href="/logout/">Log out</a> ';
 		}
 		
 		echo '<div id="userbar">';
- 			if(isset($_SESSION['signed_in']) && $_SESSION['signed_in'] == true)
+ 			if ($_SESSION['signed_in'])
  			{
- 	 			echo "Hello <a href='/user/" . $_SESSION["userid"] . "/'>" . $_SESSION["username"] . "</a>.";
+ 	 			echo "Hello <a href='/user/" . $_SESSION["userid"] . "/'>" . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . "</a>.";
  			}
  			else
  			{

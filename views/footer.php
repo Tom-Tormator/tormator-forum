@@ -5,10 +5,8 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
-?>
-
-</div><!-- content -->
-<div id="footer"><?php echo $config["footer"]; ?></div>
-</div><!-- wrapper -->
+?></div>
+<div id="footer"><?php echo(htmlspecialchars($config["footer"], ENT_NOQUOTES)); ?></div>
+</div>
 </body>
 </html>

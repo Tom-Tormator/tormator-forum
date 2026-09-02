@@ -1,53 +1,250 @@
 /* Main styles. */
-body {background-color: gray; text-align: center;}
-#wrapper {width: 900px; margin: 0 auto;}
-#content {background-color: #fff; border: 1px solid #000; float: left; font-family: Arial; padding: 20px 30px; text-align: left; width: 100%;}
-#menu {float: left; border-top-left-radius: 6px; border-top-right-radius: 6px; border: 1px solid #000; border-bottom: none; clear: both; width: 100%; height:25px; padding: 0 30px; padding-top: 10px; padding-bottom: 1px; background-color: #FFF; text-align: left; font-size: 85%;}
-#menu a:hover {background-color: #009FC1;}
-#userbar {background-color: #fff; float: right; width: 250px;}
-#footer {border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-size: 75%; clear: both; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; background: white; min-width: 950px; max-width: 960px; padding: 5px;}
-button {background: linear-gradient(lightgray, lightblue); border: 1px solid gray; border-radius: 3px;}
-input {background: linear-gradient(lightgray, lightblue); border: 1px solid gray; border-radius: 3px;}
-select {background: linear-gradient(lightgray, lightblue); border: 1px solid gray; border-radius: 3px;}
-.message {border: 1px solid black; border-radius: 4px; background: yellow; padding: 5px;}
+html {
+ font-family: Arial, sans-serif;
+}
+body {
+ background-color: #dfdfdf;
+ margin: 0 auto;
+}
+#wrapper {
+ max-width: 900px;
+ margin: auto;
+}
+#header {
+ background: white;
+ border: 1px solid black;
+ border-top: none;
+ border-bottom: none;
+ width: 100%;
+ padding: 8px 16px;
+ box-sizing: border-box;
+}
+#content {
+ background-color: #fff;
+ border: 1px solid #000;
+ padding: 8px 16px;
+ width: 100%;
+ box-sizing: border-box;
+}
+#menu {
+ border: 1px solid #000;
+ border-bottom: none;
+ width: 100%;
+ padding: 8px 16px;
+ background-color: white;
+ box-sizing: border-box;
+}
+#userbar {
+ float: right;
+}
+#footer {
+ border-bottom-left-radius: 6px;
+ border-bottom-right-radius: 6px;
+ clear: both;
+ border-bottom: 1px solid black;
+ border-left: 1px solid black;
+ border-right: 1px solid black;
+ background: white;
+ padding: 8px 16px;
+ width: 100%;
+ box-sizing: border-box;
+}
+button {
+ background: linear-gradient(lightgrey, lightblue);
+ border: 1px solid gray;
+ border-radius: 3px;
+}
+input {
+ border: 1px solid gray;
+ border-radius: 3px;
+}
+select {
+ border: 1px solid gray;
+ border-radius: 3px;
+}
+.message {
+ border: 1px solid black;
+ border-radius: 4px;
+ background: yellow;
+ padding: 5px;
+}
 
 /* Pagination styles. */
-.paginationleft {background: lightgray; float: left; border-left: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
-.paginationright {background: lightgray; text-align: right; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; padding: 8px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
-.paginationleft a {background: linear-gradient(lightblue, #00728B); border: 1px solid #032472; border-radius: 4px; color: black; font-family: Arial; padding: 3px; text-decoration: none;}
-.paginationright a {background: linear-gradient(lightblue, #00728B); border: 1px solid #032472; border-radius: 4px; color: black; font-family: Arial; padding: 3px; text-decoration: none;}
-.paginationleft font {background: linear-gradient(lightgray, gray); border: 1px solid #032472; border-radius: 4px; color: black; font-family: Arial; padding: 3px; text-decoration: none;}
-.paginationright font {background: linear-gradient(lightgray, gray); border: 1px solid #032472; border-radius: 4px; color: black; font-family: Arial; padding: 3px; text-decoration: none;}
+.paginationleft {
+ background: lightgray;
+ float: left;
+ border-left: 1px solid black;
+ border-top: 1px solid black;
+ border-bottom: 1px solid black;
+ padding: 8px;
+ border-top-left-radius: 4px;
+ border-bottom-left-radius: 4px;
+}
+.paginationright {
+ background: lightgray;
+ text-align: right;
+ border-right: 1px solid black;
+ border-top: 1px solid black;
+ border-bottom: 1px solid black;
+ padding: 8px;
+ border-top-right-radius: 4px;
+ border-bottom-right-radius: 4px;
+ border-top-left-radius: 5px;
+ border-bottom-left-radius: 5px;
+}
+.paginationleft a {
+ background: linear-gradient(lightblue, #00728B);
+ border: 1px solid #032472;
+ border-radius: 4px;
+ color: black;
+ padding: 3px;
+ text-decoration: none;
+}
+.paginationright a {
+ background: linear-gradient(lightblue, #00728B);
+ border: 1px solid #032472;
+ border-radius: 4px;
+ color: black;
+ padding: 3px;
+ text-decoration: none;
+}
+.paginationleft font {
+ background: linear-gradient(lightgray, gray);
+ border: 1px solid #032472;
+ border-radius: 4px;
+ color: black;
+ padding: 3px;
+ text-decoration: none;
+}
+.paginationright font {
+ background: linear-gradient(lightgray, gray);
+ border: 1px solid #032472;
+ border-radius: 4px;
+ color: black;
+ font-family: Arial;
+ padding: 3px;
+ text-decoration: none;
+}
 
 /* Table styles. */
-table {border-collapse: separate; width: 100%; border: 1px solid navy; border-radius: 8px;}
-table a {color: #000;}
-table a:hover {color:#373737; text-decoration: none;}
-th {background-color: blue; color: #F0F0F0; border: 1px solid black; border-radius: 6px;}
-td {padding: 5px; border: 1px solid black; border-radius: 8px;}
-
-/* Font styles. */
-h1 {font-family: Arial; color: black;}
-h3 {margin: 0; padding: 0;}
+table {
+ border-collapse: separate;
+ width: 100%;
+ border: 1px solid navy;
+ border-radius: 8px;
+}
+table a {
+ color: #000;
+}
+table a:hover {
+ color:#373737;
+ text-decoration: none;
+}
+th {
+ background-color: blue;
+ color: #F0F0F0;
+ border: 1px solid black;
+ border-radius: 6px;
+}
+td {
+ padding: 5px;
+ border: 1px solid black;
+ border-radius: 8px;
+}
 
 /* Menu styles. */
-.item {background: linear-gradient(#00728B, blue); border: 1px solid #032472; border-radius: 4px; color: #FFF; font-family: Arial; padding: 3px; text-decoration: none;}
-.category {border: 1px solid #000000; padding: 12px; border-radius: 6px;}
-.leftpart {width: 70%;}
-.rightpart {width: 30%;}
-.small {font-size: 75%; color: #373737;}
-.topic-post {height: 100px; overflow: auto;}
-.post-content {padding: 30px;}
-textarea {width: 500px; height: 200px;}
+.item {
+ background: linear-gradient(#0E1359, blue);
+ border: 1px solid #032472;
+ border-radius: 4px;
+ color: #FFF;
+ padding: 2px 4px;
+ text-decoration: none;
+}
+.categories {
+ display: grid;
+ gap: 4px;
+}
+.category {
+ border: 1px solid #000000;
+ padding: 12px;
+ border-radius: 6px;
+}
+.leftpart {
+ width: 70%;
+}
+.rightpart {
+ width: 30%;
+}
+.small {
+ font-size: 75%;
+ color: #373737;
+}
+.topic-post {
+ height: 100px;
+ overflow: auto;
+}
+.post-content {
+ padding: 30px;
+}
+textarea {
+ width: 500px;
+ height: 200px;
+}
 
 /* Thread styles. */
-.thread {border-top-left-radius: 6px; border-top-right-radius: 6px; max-width:1000px; border:1px solid black; padding: 8px}
-.threadcontent {border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; border-bottom:1px solid black; border-right:1px solid black; border-left:1px solid black; padding: 8px; max-width:1000px; word-wrap: break-word;}
-.postc {display: inline; float:right; margin-left: 2px;}
-.hiddenpost {border-radius: 6px; max-width:1000px; border:1px solid black; padding: 8px; background: gray;}
-.threadbutton {background: linear-gradient(#00728B, blue); border: 1px solid black; border-radius: 4px; color: white; font-family: Arial; display: inline; padding: 4px; text-decoration: none; float: right; margin-left: 2px;}
-.locked {background: gray; border: 1px solid black; border-radius: 4px; padding: 2px;}
-.sticky {background: gold; border: 1px solid black; border-radius: 4px; padding: 2px;}
+.thread {
+ border-top-left-radius: 6px;
+ border-top-right-radius: 6px;
+ max-width:1000px;
+ border:1px solid black;
+ padding: 8px
+}
+.threadcontent {
+ border-bottom-left-radius: 6px;
+ border-bottom-right-radius: 6px;
+ border-bottom:1px solid black;
+ border-right:1px solid black;
+ border-left:1px solid black;
+ padding: 8px;
+ max-width:1000px;
+ word-wrap: break-word;
+}
+.postc {
+ display: inline;
+ float:right;
+ margin-left: 2px;
+}
+.hiddenpost {
+ border-radius: 6px;
+ max-width:1000px;
+ border:1px solid black;
+ padding: 8px;
+ background: gray;
+}
+.threadbutton {
+ background: linear-gradient(#00728B, blue);
+ border: 1px solid black;
+ border-radius: 4px;
+ color: white;
+ display: inline;
+ padding: 4px;
+ text-decoration: none;
+ float: right;
+ margin-left: 2px;
+}
+.locked {
+ background: gray;
+ border: 1px solid black;
+ border-radius: 4px;
+ padding: 2px;
+}
+.sticky {
+ background: gold;
+ border: 1px solid black;
+ border-radius: 4px;
+ padding: 2px;
+}
 
 /* Post colors. */
 [postcolor="1"] {background: lightblue;}
@@ -68,8 +265,24 @@ textarea {width: 500px; height: 200px;}
 [postcolor="16"] {background: aliceblue;}
 
 /* Userlist Styles. */
-.userlist {border:1px solid black; padding:5px; border-radius: 6px;}
+.userlist {
+ border:1px solid black;
+ padding:5px;
+ border-radius: 6px;
+}
 
 /* User Styles. */
-.usertop {border:1px solid black; padding:8px; border-top-left-radius: 8px; border-top-right-radius: 8px;}
-.userbottom {border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; padding:8px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;}
+.usertop {
+ border:1px solid black;
+ padding:8px;
+ border-top-left-radius: 8px;
+ border-top-right-radius: 8px;
+}
+.userbottom {
+ border-bottom:1px solid black;
+ border-left:1px solid black;
+ border-right:1px solid black;
+ padding:8px;
+ border-bottom-left-radius: 8px;
+ border-bottom-right-radius: 8px;
+}

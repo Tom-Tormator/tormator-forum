@@ -50,8 +50,7 @@ function message($content) {
 
 // Convert a unix timestamp into a human readable time format.
 function relativeTime($timestamp) {
-	$now = time();
-	$diff = $now - $timestamp;
+	$diff = time() - $timestamp;
 	
 	if ($diff <= 0) {
 		return "Just now";
@@ -112,6 +111,11 @@ function relativeTime($timestamp) {
 	elseif ($diff > 58060800) {
 		return round(((((($diff / 60) / 60) / 24) / 7) / 4) / 12) . " years ago";
 	}
+}
+
+function flushConfig() {
+    global $config;
+    return file_put_contents("config/config.php", "<?php\n\n if (!defined(\"INDEXED\")) exit;\n\n\$config = " . var_export($config, true) . "\n\n?>");
 }
 
 ?>

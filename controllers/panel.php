@@ -5,10 +5,9 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
-include "header.php";
+require "views/header.php";
 
-if (!$_SESSION["role"] == "Administrator")
-{
+if ($_SESSION["role"] != "Administrator") {
 	message("Sorry, this page is unavailable to non-admins.");
 }
 else
@@ -16,6 +15,6 @@ else
 	message("This page is a work in progress.");
 }
 
-include "footer.php";
+require "views/footer.php";
 
 ?>
