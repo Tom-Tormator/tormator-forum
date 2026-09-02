@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 		// If the user is requesting to delete a post...
-		elseif (($_POST["delete"]) and (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
+		elseif (isset($_POST["delete"]) and (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
 			$result = $db->query("DELETE FROM posts WHERE postid='" . $db->real_escape_string($_POST["delete"]) . "'");
 			
 			if (!$result) {
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 		// If the user is requesting to hide a post...
-		elseif (($_POST["hide"]) and (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
+		elseif (isset($_POST["hide"]) and (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
 			$result = $db->query("UPDATE posts SET deletedby='" . $_SESSION["userid"] . "' WHERE postid='" . $db->real_escape_string($_POST["hide"]) . "'");
 			
 			if (!$result) {

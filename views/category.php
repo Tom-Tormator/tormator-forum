@@ -50,9 +50,9 @@ while ($row = $threads->fetch_assoc()) {
     $uinfo = $db->query("SELECT * FROM users WHERE userid='" . $row["startuser"] . "'");
 				
     while ($u = $uinfo->fetch_assoc()) {
-        echo '<a href="/user/' . $row['startuser'] . '/">' . $u['username'] . '</a>';
+        echo '<a href="/user/' . $row['startuser'] . '/">' . htmlspecialchars($u['username'], ENT_NOQUOTES) . '</a>';
     }
-				
+
     echo "</br><small><a title='" . date('m-d-Y h:i:s A', $row['starttime']) . "'>" . relativeTime($row["starttime"]) . "</a></small>";
 				
     echo("</td><td>");

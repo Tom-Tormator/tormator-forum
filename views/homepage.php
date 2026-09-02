@@ -14,8 +14,8 @@ if ($category_query->num_rows > 0):
 while ($category = $category_query->fetch_assoc()) {
 	$numthreads = $db->query("SELECT 1 FROM `threads` WHERE `category`='" . $category["categoryid"] . "'");
 	echo("<div class='category'>
-	<h3><a href='/category/" . $category["categoryid"] . "/'>" . htmlspecialchars($category["categoryname"]) . '</a></h3>'
-	. $category["categorydescription"] . "
+	<h3><a href='/category/" . $category["categoryid"] . "/'>" . htmlspecialchars($category["categoryname"], ENT_NOQUOTES) . '</a></h3>'
+	. htmlspecialchars($category["categorydescription"], ENT_NOQUOTES) . "
 	<br>
 	Threads: {$numthreads->num_rows}
 	</div>");

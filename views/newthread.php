@@ -7,7 +7,7 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if ($_SESSION["signed_in"] and ($cats->num_rows > 1) and !$success):
+if ($_SESSION["signed_in"] and ($cats->num_rows > 0) and !$success):
 ?><h2>Create a thread</h2>
 		
 <form method='post' class='form'>
@@ -19,7 +19,7 @@ if ($_SESSION["signed_in"] and ($cats->num_rows > 1) and !$success):
     while ($cat = $cats->fetch_assoc()) {
         echo "<option ";
         if (($_POST["category"] ?? "") == $cat["categoryid"]) echo "selected ";
-        echo "value='" . $cat["categoryid"] . "'>" . $cat["categoryname"] . "</option>";
+        echo "value='" . $cat["categoryid"] . "'>" . htmlspecialchars($cat["categoryname"], ENT_NOQUOTES) . "</option>";
     }
  ?>
  </select>

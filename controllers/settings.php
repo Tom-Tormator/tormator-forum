@@ -15,6 +15,9 @@ if (!$_SESSION["signed_in"]) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["newusername"])) {
+        $password_query = $db->query("SELECT `password` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
+        $p = $password_query->fetch_assoc();
+        
         if (strlen($_POST["newusername"]) < 1) {
             message("New username cannot be blank.");
         }
@@ -30,14 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         elseif ($db->query("SELECT 1 FROM `users` WHERE `username`='" . $db->real_escape_string($_POST["newusername"]) . "'")->num_rows > 0) {
             message("New username is already taken.");
         }
-        
-        $password_query = $db->query("SELECT `password` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
-        $p = $password_query->fetch_assoc();
-        
-        if (!password_verify($_POST["confirmpass"] ?? "", $p["password"])) {
+        elseif (!password_verify($_POST["confirmpass"] ?? "", $p["password"])) {
             message("Incorrect password.");
         }
-        
         else {
             $result = $db->query("UPDATE `users` SET `username`='" . $db->real_escape_string($_POST["newusername"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
             if (!$result) {

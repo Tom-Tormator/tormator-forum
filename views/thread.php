@@ -86,9 +86,9 @@ while ($row = $posts_query->fetch_assoc()) {
 				echo '<form class="postc" action="" method="post"><button name="edit" value="' . $row["postid"] . '">Edit</button></form>';
 			}
 			
-			if (isset($_POST["edit"]) && ($_POST["edit"] == $row["postid"]) && (!($_SESSION["role"] == "Suspended")) && ($_SESSION['signed_in'] == true)) {
+			if (isset($_POST["edit"]) and ($_POST["edit"] == $row["postid"]) and $_SESSION["signed_in"]) {
 				echo '</div><form method="post" action="">';				
-				echo '<textarea name="saveedit" />' . ($row["content"]) . '</textarea><textarea style="display:none;" name="saveeditpostid">' . $row["postid"] . '</textarea></br><input type="submit" value="Save edit"></form></br>';
+				echo '<textarea name="saveedit">' . htmlspecialchars($row["content"], ENT_NOQUOTES) . '</textarea><textarea style="display:none;" name="saveeditpostid">' . $row["postid"] . '</textarea></br><input type="submit" value="Save edit"></form></br>';
 			}
 			
 			else {
