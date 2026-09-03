@@ -114,11 +114,17 @@ function flushConfig() {
 function title() {
     global $title, $config;
     if ($title) {
-        echo($title . " - " . $config["forumName"]);
+        echo(htmlspecialchars($title, ENT_NOQUOTES) . " - " . htmlspecialchars($config["forumName"], ENT_NOQUOTES));
     }
     else {
-        echo($config["forumName"]);
+        echo(htmlspecialchars($config["forumName"], ENT_NOQUOTES));
     }
+}
+
+// Returns true if the current user is a Moderator or an Administrator.
+function isMod() {
+    if ($_SESSION["signed_in"] and (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) return true;
+    else return false;
 }
 
 ?>

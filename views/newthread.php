@@ -24,7 +24,7 @@ if ($_SESSION["signed_in"] and ($cats->num_rows > 0) and !$success):
  ?>
  </select>
  <label for='postcontent'>Content:</label>
- <textarea name='postcontent' id='postcontent'><?php echo(htmlspecialchars($_POST["postcontent"] ?? "")); ?></textarea>
+ <textarea name='postcontent' id='postcontent' class='postTextbox'><?php echo(htmlspecialchars($_POST["postcontent"] ?? "")); ?></textarea>
  <br>
  <input type="submit" value="Create thread">
 </form>

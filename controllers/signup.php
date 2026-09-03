@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             message("Something went wrong while registering. Please try again later.");
         }
         else {
-            message('Successfully registered. You can now <a href="login.php">log in</a> and start posting! :-)');
+            message("Successfully registered. You can now <a href='/login/'>log in</a> and start posting! :-)");
             $success = true;
         }
     }

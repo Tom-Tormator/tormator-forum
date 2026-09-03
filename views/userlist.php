@@ -12,9 +12,11 @@ if ($users_query->num_rows > 0):
 
 <h2>Userlist</h2>
 
+<div class='userlist'>
 <?php
 while ($user = $users_query->fetch_assoc()) {
-    echo('<div class="userlist" style="background:#' . $user["color"] . ';"><b><a href="/user/' . $user["userid"] . '/">' . htmlspecialchars($user["username"], ENT_NOQUOTES) . '</a></b>&nbsp; ' . $user["role"] . '&nbsp; <small>' . $user["lastaction"] . ' (<a title="' . date('m-d-Y h:i:s A', $user["lastactive"]) . '">' . relativeTime($user["lastactive"]) . '</a>)</small></div></br>');
+    echo('<div class="userlistitem" style="background:#' . $user["color"] . ';"><a href="/user/' . $user["userid"] . '/">' . htmlspecialchars($user["username"], ENT_NOQUOTES) . '</a>&nbsp; ' . $user["role"] . '&nbsp; <small>' . $user["lastaction"] . ' (<abbr title="' . date('m-d-Y h:i:s A', $user["lastactive"]) . '">' . relativeTime($user["lastactive"]) . '</abbr>)</small></div>');
 }
-
-endif; require "views/footer.php"; ?>
+?>
+</div>
+<?php endif; require "views/footer.php"; ?>

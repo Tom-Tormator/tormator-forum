@@ -20,9 +20,10 @@ if (!defined("INDEXED")) exit;
  <div id="menu">
   <a class="item" href="/">Home</a>
   <a class="item" href="/userlist/">Userlist</a>
+  <?php if ($_SESSION["signed_in"]): ?>
   <a class="item" href="/settings/">Settings</a>
   <a class="item" href="/newthread/">Create a thread</a>
-<?php
+ <?php endif;
 		if ($_SESSION["role"] == "Administrator") {
 			echo '<a class="item" href="/newcategory/">Create a category</a> ';
 			echo '<a class="item" href="/panel/">Admin Panel</a> ';
@@ -34,7 +35,7 @@ if (!defined("INDEXED")) exit;
 		
 		echo '<div id="userbar">';
  			if ($_SESSION['signed_in']) {
- 	 			echo "Hello <a href='/user/" . $_SESSION["userid"] . "/'>" . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . "</a>.";
+ 	 			echo "Hello, <a href='/user/" . $_SESSION["userid"] . "/'>" . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . "</a>.";
  			}
  			else {
  				echo '<a href="/login/">Log in</a> or <a href="/signup/">Sign up</a>.';

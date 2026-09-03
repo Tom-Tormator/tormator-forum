@@ -14,7 +14,6 @@ else {
     message("This page is a work in progress.");
 }
 
-require "views/header.php";
-require "views/footer.php";
+require "views/panel.php";
 
 ?>

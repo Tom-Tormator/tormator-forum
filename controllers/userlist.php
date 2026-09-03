@@ -5,6 +5,8 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
+$title = "Userlist";
+
 // Start off by making a query for our list.
 $users_query = $db->query("SELECT * FROM users ORDER BY userid ASC");
 

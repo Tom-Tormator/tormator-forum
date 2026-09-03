@@ -11,13 +11,14 @@ body {
  margin: auto;
 }
 #header {
- background: linear-gradient(#b0b1ff, #5558ff, #5558ff);
+ background: linear-gradient(#1498d4, #0c56a1);
  border: 1px solid black;
  border-top: none;
  border-bottom: none;
  width: 100%;
  padding: 8px 16px;
  box-sizing: border-box;
+ color: white;
 }
 #content {
  background-color: #fff;
@@ -33,9 +34,12 @@ body {
  padding: 8px 16px;
  background-color: white;
  box-sizing: border-box;
+ display: flex;
+ gap: 4px;
+ align-items: center;
 }
 #userbar {
- float: right;
+ margin-left: auto;
 }
 #userbar a {
  text-decoration: none;
@@ -82,28 +86,27 @@ select {
  border-radius: 3px;
 }
 table {
- border-collapse: separate;
+ border-collapse: collapse;
  width: 100%;
- border: 1px solid navy;
- border-radius: 8px;
+ table-layout: auto;
 }
 table a {
  color: #000;
-}
-table a:hover {
- color:#373737;
  text-decoration: none;
 }
+table a:hover {
+ color: #373737;
+ text-decoration: underline;
+}
 th {
- background-color: blue;
- color: #F0F0F0;
+ background-color: #5fb4ff;
+ color: black;
  border: 1px solid black;
- border-radius: 6px;
+ padding: 3px 6px;
 }
 td {
- padding: 5px;
+ padding: 3px 6px;
  border: 1px solid black;
- border-radius: 8px;
 }
 #messages {
  display: grid;
@@ -125,73 +128,58 @@ td {
 }
 
 /* Pagination styles. */
-.paginationleft {
+.pagination {
  background: lightgray;
- float: left;
- border-left: 1px solid black;
- border-top: 1px solid black;
- border-bottom: 1px solid black;
+ border: 1px solid black;
  padding: 8px;
- border-top-left-radius: 4px;
- border-bottom-left-radius: 4px;
+ border-radius: 4px;
+ display: flex;
+ flex-basis: 0;
+ margin: 6px 0 6px 0;
+}
+.paginationleft {
+ text-align: left;
+ flex: 1 1 0px;
 }
 .paginationright {
- background: lightgray;
  text-align: right;
- border-right: 1px solid black;
- border-top: 1px solid black;
- border-bottom: 1px solid black;
- padding: 8px;
- border-top-right-radius: 4px;
- border-bottom-right-radius: 4px;
- border-top-left-radius: 5px;
- border-bottom-left-radius: 5px;
+ flex: 1 1 0px;
 }
-.paginationleft a {
- background: linear-gradient(lightblue, #00728B);
+.pagination a {
+ background: linear-gradient(#d8f5ff, #00d2ff);
  border: 1px solid #032472;
  border-radius: 4px;
  color: black;
  padding: 3px;
  text-decoration: none;
 }
-.paginationright a {
- background: linear-gradient(lightblue, #00728B);
- border: 1px solid #032472;
- border-radius: 4px;
- color: black;
- padding: 3px;
- text-decoration: none;
+.pagination a:hover {
+ text-decoration: underline;
 }
-.paginationleft font {
+.pagination span {
  background: linear-gradient(lightgray, gray);
  border: 1px solid black;
  border-radius: 4px;
  color: black;
- padding: 3px;
- text-decoration: none;
-}
-.paginationright font {
- background: linear-gradient(lightgray, gray);
- border: 1px solid black;
- border-radius: 4px;
- color: black;
- font-family: Arial;
  padding: 3px;
  text-decoration: none;
 }
 
 /* Menu styles. */
 .item {
- background: linear-gradient(blue, #0E1359);
+ background: linear-gradient(#166ad7, #111A95);
  border: 1px solid #032472;
  border-radius: 4px;
  color: white;
  padding: 2px 4px;
  text-decoration: none;
+ font-family: inherit;
+ font-size: 16px;
+ display: inline-block;
 }
 .item:hover {
  text-decoration: underline;
+ cursor: pointer;
 }
 .categories {
  display: grid;
@@ -201,6 +189,18 @@ td {
  border: 1px solid #000000;
  padding: 12px;
  border-radius: 6px;
+}
+.category h3 {
+ width: fit-content;
+}
+.categoryname {
+ text-decoration: none;
+ color: black;
+ font-weight: bold;
+}
+.categoryname:hover {
+ text-decoration: underline;
+ color: #444;
 }
 .leftpart {
  width: 70%;
@@ -221,90 +221,116 @@ td {
 }
 
 /* Thread styles. */
-.thread {
- border-top-left-radius: 6px;
- border-top-right-radius: 6px;
- max-width:1000px;
- border:1px solid black;
- padding: 8px
+.posts {
+ display: grid;
+ gap: 6px;
 }
-.threadcontent {
- border-bottom-left-radius: 6px;
- border-bottom-right-radius: 6px;
- border-bottom:1px solid black;
- border-right:1px solid black;
- border-left:1px solid black;
+.post {
+  border-radius: 4px;
+}
+.postheader {
+ border-top-left-radius: inherit;
+ border-top-right-radius: inherit;
+ border: 1px solid black;
  padding: 8px;
- max-width:1000px;
- word-wrap: break-word;
+ border-bottom: 1px solid black;
+ display: flex;
+ align-items: center;
 }
-.postc {
- display: inline;
- float:right;
- margin-left: 2px;
+.postheader a {
+ text-decoration: none;
+ color: black;
+ font-weight: bold;
+}
+.postheader a:hover {
+ text-decoration: underline;
+ color: #222;
+}
+.postcontent {
+ padding: 8px;
+ word-wrap: break-word;
+ white-space: pre;
+ border: 1px solid black;
+ border-top: none;
+ border-bottom-left-radius: inherit;
+ border-bottom-right-radius: inherit;
 }
 .hiddenpost {
- border-radius: 6px;
- max-width:1000px;
- border:1px solid black;
- padding: 8px;
- background: gray;
+ background: #ccc;
+ border-radius: inherit;
+ border-bottom: 1px solid black;
 }
-.threadButtons {
- float: right;
+.postbuttons {
+ margin-left: auto;
  display: flex;
  gap: 2px;
 }
-.locked {
- background: gray;
- border: 1px solid black;
+.postc {
+ display: inline-block;
+}
+.threadnavbar {
+ display: flex;
+}
+.threadButtons {
+ display: flex;
+ gap: 2px;
+ margin-left: auto;
+}
+.labels {
+ display: inline-flex;
+ gap: 4px;
+}
+.label {
  border-radius: 4px;
- padding: 2px;
+ padding: 2px 4px;
+}
+.locked {
+ background: #777;
+ border: 1px solid #111;
+ color: white;
 }
 .sticky {
- background: gold;
- border: 1px solid black;
- border-radius: 4px;
- padding: 2px;
+ background: green;
+ border: 1px solid #020;
+ color: white;
 }
-
-/* Post colors. */
-[postcolor="1"] {background: lightblue;}
-[postcolor="2"] {background: lightgreen;}
-[postcolor="3"] {background: yellow;}
-[postcolor="4"] {background: indianred;}
-[postcolor="5"] {background: hotpink;}
-[postcolor="6"] {background: mediumpurple;}
-[postcolor="7"] {background: coral;}
-[postcolor="8"] {background: cornflowerblue;}
-[postcolor="9"] {background: lavender;}
-[postcolor="10"] {background: silver;}
-[postcolor="11"] {background: wheat;}
-[postcolor="12"] {background: sandybrown;}
-[postcolor="13"] {background: mediumseagreen;}
-[postcolor="14"] {background: gold;}
-[postcolor="15"] {background: plum;}
-[postcolor="16"] {background: aliceblue;}
+.postTextbox {
+ width: 100%;
+ min-height: 20vh;
+}
 
 /* Userlist Styles. */
 .userlist {
- border:1px solid black;
- padding:5px;
- border-radius: 6px;
+ display: grid;
+ gap: 4px;
+}
+.userlistitem {
+ border: 1px solid black;
+ padding: 5px;
+ border-radius: 4px;
+}
+.userlistitem a {
+ color: black;
+ text-decoration: none;
+ font-weight: bold;
+}
+.userlistitem a:hover {
+ color: #222;
+ text-decoration: underline;
 }
 
 /* User Styles. */
 .usertop {
- border:1px solid black;
- padding:8px;
+ border: 1px solid black;
+ padding: 8px;
  border-top-left-radius: 8px;
  border-top-right-radius: 8px;
 }
 .userbottom {
- border-bottom:1px solid black;
- border-left:1px solid black;
- border-right:1px solid black;
- padding:8px;
+ border-bottom: 1px solid black;
+ border-left: 1px solid black;
+ border-right: 1px solid black;
+ padding: 8px;
  border-bottom-left-radius: 8px;
  border-bottom-right-radius: 8px;
 }
