@@ -5,6 +5,9 @@
 // Define a constant to ensure pages are only loaded through this index file.
 define("INDEXED", "1");
 
+// Disable the output buffer to avoid screen tears.
+ob_end_clean();
+
 $messages = array();
 
 // Load up the config.
@@ -26,6 +29,7 @@ if (!session_id()) {
 // These need to be set explicitly to avoid warnings later on.
 if (!isset($_SESSION["signed_in"])) $_SESSION["signed_in"] = false;
 if (!isset($_SESSION["role"])) $_SESSION["role"] = "Guest";
+if (!isset($_SESSION["userid"])) $_SESSION["userid"] = "0";
 
 // Check the user's role and ensure their session reflects it accordingly.
 if ($config["installed"] and $_SESSION["signed_in"]) {

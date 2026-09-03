@@ -15,7 +15,7 @@ if ($_SESSION["signed_in"]):
  <label for='color'>Color:</label>
  <input type='color' name='color' id='color' value='<?php echo(htmlspecialchars($_POST["color"] ?? "#" . $user_info["color"])); ?>'>
  <br>
- <input type='submit' value='Change color'>
+ <input type='submit' class='item' value='Change color'>
 </form>
 <h4>Change username</h4>
 <form method='post' class='form'>
@@ -24,7 +24,7 @@ if ($_SESSION["signed_in"]):
  <label for='confirmpass'>Current password:</label>
  <input type='password' name='confirmpass' id='confirmpass'>
  <br>
- <input type='submit' value='Change username'>
+ <input type='submit' class='item' value='Change username'>
 </form>
 
 <?php endif; require "views/footer.php"; ?>

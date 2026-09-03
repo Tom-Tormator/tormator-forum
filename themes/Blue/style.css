@@ -7,7 +7,7 @@ body {
  margin: 0 auto;
 }
 #wrapper {
- max-width: 900px;
+ max-width: 1200px;
  margin: auto;
 }
 #header {
@@ -70,7 +70,7 @@ body {
 .form label {
  text-align: right;
 }
-.form input[type='submit'], .form select {
+.form input[type='submit'], .form input[type='checkbox'], .form select {
  width: fit-content;
 }
 button {
@@ -99,24 +99,27 @@ table a:hover {
  text-decoration: underline;
 }
 th {
- background-color: #5fb4ff;
- color: black;
+ background: linear-gradient(#1498d4, #0c56a1);
+ color: white;
  border: 1px solid black;
- padding: 3px 6px;
+ padding: 4px 8px;
 }
 td {
- padding: 3px 6px;
+ padding: 4px 8px;
  border: 1px solid black;
+}
+tr:nth-child(even) {
+ background: linear-gradient(#edfbff, #dee9ec);
 }
 #messages {
  display: grid;
- gap: 2px;
 }
 .message {
  border: 1px solid black;
  border-radius: 4px;
  background: yellow;
  padding: 5px;
+ margin-bottom: 4px;
 }
 .message a {
  text-decoration: none;
@@ -146,10 +149,10 @@ td {
  flex: 1 1 0px;
 }
 .pagination a {
- background: linear-gradient(#d8f5ff, #00d2ff);
+ background: linear-gradient(#166ad7, #111A95);
  border: 1px solid #032472;
  border-radius: 4px;
- color: black;
+ color: white;
  padding: 3px;
  text-decoration: none;
 }
@@ -157,10 +160,10 @@ td {
  text-decoration: underline;
 }
 .pagination span {
- background: linear-gradient(lightgray, gray);
+ background: linear-gradient(#999, #444);
  border: 1px solid black;
  border-radius: 4px;
- color: black;
+ color: white;
  padding: 3px;
  text-decoration: none;
 }
@@ -181,18 +184,6 @@ td {
  text-decoration: underline;
  cursor: pointer;
 }
-.categories {
- display: grid;
- gap: 4px;
-}
-.category {
- border: 1px solid #000000;
- padding: 12px;
- border-radius: 6px;
-}
-.category h3 {
- width: fit-content;
-}
 .categoryname {
  text-decoration: none;
  color: black;
@@ -203,10 +194,10 @@ td {
  color: #444;
 }
 .leftpart {
- width: 70%;
+ width: 60%;
 }
-.rightpart {
- width: 30%;
+.centered {
+ text-align: center;
 }
 .small {
  font-size: 75%;
@@ -285,18 +276,24 @@ td {
  padding: 2px 4px;
 }
 .locked {
- background: #777;
+ background: linear-gradient(#999, #444);
  border: 1px solid #111;
  color: white;
 }
 .sticky {
- background: green;
+ background: linear-gradient(#169116, #003c00);
  border: 1px solid #020;
  color: white;
 }
 .postTextbox {
  width: 100%;
  min-height: 20vh;
+ resize: vertical;
+ box-sizing: border-box;
+}
+.editbuttons {
+ display: flex;
+ gap: 1px;
 }
 
 /* Userlist Styles. */

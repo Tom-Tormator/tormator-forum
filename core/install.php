@@ -18,6 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Config directory isn't writable.";
     }
     
+    $uinvalid = validateUsername($_POST["username"] ?? "");
+    if ($uinvalid) $errors[] = $uinvalid;
+    
+    $einvalid = validateEmail($_POST["email"] ?? "");
+    if ($einvalid) $errors[] = $einvalid;
+    
+    $pinvalid = validatePassword($_POST["password"] ?? "", $_POST["confirmpassword"] ?? "");
+    if ($pinvalid) $errors[] = $pinvalid;
+    
     try {
         $db = mysqli_connect($_POST["SQLHost"], $_POST["SQLUser"],  $_POST["SQLPass"], $_POST["SQLDB"]);
     }
@@ -31,6 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     else {
+        if (($_POST["overwrite"] ?? "") == "on") {
+            $db->query("DROP TABLE IF EXISTS `categories`");
+            $db->query("DROP TABLE IF EXISTS `posts`");
+            $db->query("DROP TABLE IF EXISTS `threads`");
+            $db->query("DROP TABLE IF EXISTS `users`");
+        }
+        
         $db->query("CREATE TABLE IF NOT EXISTS `categories` (
             `categoryid` int unsigned NOT NULL AUTO_INCREMENT,
             `categoryname` varchar(255) NOT NULL,
@@ -83,6 +99,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             UNIQUE KEY `user_name` (`username`),
             UNIQUE KEY `user_email` (`email`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        
+        // Make a default category.
+        $db->query("REPLACE INTO `categories` (`categoryname`, `categorydescription`) VALUES ('General', 'Discuss general topics here.')");
+        
+        $now = time();
+        $ip = $db->real_escape_string(hash("sha256", $_SERVER["REMOTE_ADDR"]));
+        $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+        
+        // Create the admin's account.
+        $db->query("REPLACE INTO `users` (`username`, `email`, `password`, `role`, `jointime`, `lastactive`, `joinip`, `ip`, `verified`) VALUES ('" . $db->real_escape_string($_POST["username"]) . "', '" . $db->real_escape_string($_POST["email"]) . "', '" . $db->real_escape_string($password) ."', 'Administrator', '{$now}', '{$now}', '{$ip}', '{$ip}' ,'1')");
+        $config["mainAdmin"] = $db->insert_id;
+        
+        // Figure out if we are installing to a subdirectory.
+        $querystart = strpos($_SERVER["REQUEST_URI"], "?");
+        if ($querystart === false) $querystart = null;
+        $dirtest = explode("/", substr($_SERVER["REQUEST_URI"], 0, $querystart));
+        $lasti = count($dirtest)-1;
+        if (str_starts_with($dirtest[$lasti], "index.php")) array_pop($dirtest);
+        $dir = trim(implode("/", $dirtest), "/");
+        $config["folder"] = $dir;
 
         message("Database successfully written.");
         $config["installed"] = true;
@@ -91,24 +127,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $config["MySQLPass"] = $_POST["SQLPass"];
         $config["MySQLDatabase"] = $_POST["SQLDB"];
         flushConfig();
+        
+        // Log the admin in.
+        $_SESSION["signed_in"] = true;
+        $_SESSION["userid"] = $config["mainAdmin"];
+        $_SESSION["username"] = $_POST["username"];
+        $_SESSION["role"] = "Administrator";
     }
 }
 
 require "views/header.php";
 
 if (!$config["installed"]) {
-    echo("<h2>Install</h2>
-    <form method='post' class='form'>
+    echo("<form method='post' class='form'>
+        <br><h2>Install</h2>
+        <br><h3>SQL Details</h3>
         <label for='SQLHost'>SQL Host:</label>
-        <input type='text' name='SQLHost' id='SQLHost' value='" . htmlspecialchars($_POST["SQLHost"] ?? "") . "' placeholder='localhost'>
+        <input type='text' name='SQLHost' id='SQLHost' value='"
+        . htmlspecialchars($_POST["SQLHost"] ?? "") . "' placeholder='localhost'>
         <label for='SQLUser'>SQL User:</label>
-        <input type='text' name='SQLUser' id='SQLUser' value='" . htmlspecialchars($_POST["SQLUser"] ?? "") . "'>
+        <input type='text' name='SQLUser' id='SQLUser' value='"
+        . htmlspecialchars($_POST["SQLUser"] ?? "") . "'>
         <label for='SQLPass'>SQL Password:</label>
-        <input type='password' name='SQLPass' id='SQLPass' value='" . htmlspecialchars($_POST["SQLPass"] ?? "") . "'>
+        <input type='password' name='SQLPass' id='SQLPass' value='"
+        . htmlspecialchars($_POST["SQLPass"] ?? "") . "'>
         <label for='SQLDB'>SQL Database:</label>
-        <input type='text' name='SQLDB' id='SQLDB' value='" . htmlspecialchars($_POST["SQLDB"] ?? "") . "'>
+        <input type='text' name='SQLDB' id='SQLDB' value='"
+        . htmlspecialchars($_POST["SQLDB"] ?? "") . "'>
+        <br><h3>Admin Account</h3>
+        <label for='username'>Username:</label>
+        <input type='username' name='username' id='username' value='"
+        . htmlspecialchars($_POST["username"] ?? "") . "'>
+        <label for='email'>Email:</label>
+        <input type='email' name='email' id='email' value='"
+        . htmlspecialchars($_POST["email"] ?? "") . "'>
+        <label for='password'>Password:</label>
+        <input type='password' name='password' id='password' value='"
+        . htmlspecialchars($_POST["password"] ?? "") . "'>
+        <label for='confirmpassword'>Confirm password:</label>
+        <input type='password' name='confirmpassword' id='confirmpassword' value='"
+        . htmlspecialchars($_POST["confirmpassword"] ?? "") . "'>
+        <br><h3>Advanced</h3>
+        <label for='overwrite'>Overwrite old database:</label>
+        <input type='checkbox' name='overwrite' id='overwrite'"
+        . (($_POST["overwrite"] ?? "") == "on" ? " checked" : "") . ">
         <br>
-        <input type='submit' value='Install'>
+        <input type='submit' class='item' value='Install'>
     </form>");
 }
 

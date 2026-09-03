@@ -9,10 +9,16 @@ if (!defined("INDEXED")) exit;
 $category = $db->query("SELECT * FROM categories WHERE categoryid='" . $db->real_escape_string($url[1]) . "'");
 
 if ($category->num_rows < 1) {
-    message('This category does not exist.');
-    require "views/footer.php";
+    http_response_code(404);
+    $title = "Not found";
+    message("This category does not exist.");
+    require "views/category.php";
     exit();
 }
+
+$cat = $category->fetch_assoc();
+
+$title = $cat["categoryname"];
 
 // Find out what page we're on.
 if (isset($url[2]) and is_numeric($url[2])) {
@@ -22,8 +28,6 @@ if (isset($url[2]) and is_numeric($url[2])) {
 else {
 	$currentPage = 1;
 }
-
-$cat = $category->fetch_assoc();
 
 $threads = $db->query("SELECT 1 FROM `threads` WHERE `category`='" . $db->real_escape_string($url[1]) . "'");
 

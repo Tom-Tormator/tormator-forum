@@ -5,15 +5,14 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
-$display = true;
-
 // Get the thread's information.
 $thread_query = $db->query("SELECT * FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
 $thread = $thread_query->fetch_assoc();
 
 if ($thread_query->num_rows < 1) {
+    http_response_code(404);
+    $title = "Not found";
     message("The specified thread doesn't exist.");
-    $display = false;
     require "views/thread.php";
     exit();
 }
@@ -47,9 +46,6 @@ $posts_query = $db->query("SELECT * FROM `posts` WHERE `thread`='" . $db->real_e
 
 if ($posts_query->num_rows < 1) {
     message("There are no posts in this thread.");
-    $display = false;
-    require "views/thread.php";
-    exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -59,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         // If the user is posting...
         if (isset($_POST["content"]) and ((!$thread["locked"])
-        or idMod())) {
+        or isMod())) {
             // First check and see if the user has made a post too recently according to the post delay.
             $delaycheck = $db->query("SELECT 1 FROM `posts` WHERE `user`='" . $_SESSION["userid"] . "' AND `timestamp`>'" . (time() - $config["postDelay"]) . "'");
             
@@ -161,17 +157,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // First make sure the user has permission to edit the specified post.
             $permission = $db->query("SELECT `user` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
             $pc = $permission->fetch_assoc();
-            if ($perm_check->num_rows < 1) {
+            if ($permission->num_rows < 1) {
                 message("Post does not exist.");
             }
-            elseif (($p["user"] != $_SESSION["userid"]) and !isMod()) {
+            elseif (($pc["user"] != $_SESSION["userid"]) and !isMod()) {
                 message("You don't have permission to edit this post.");
             }
             else {
-                $result = $db->query("UPDATE `posts` SET `content`='" . $db->real_escape_string($_POST["saveedit"]) . "' WHERE `postid`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
+                $result = $db->query("UPDATE `posts` SET `content`='" . $db->real_escape_string($_POST["saveedit"]) . "', `editedby`='" . $_SESSION["userid"] . "', `edittime`='" . time() . "' WHERE `postid`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
         
                 if (!$result) {
-                    message("Sorry, post couldn't be restored.");
+                    message("Sorry, post couldn't be edited.");
                 }
                 else {
                     refresh(0);

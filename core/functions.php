@@ -5,6 +5,17 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
+function makeURL($page) {
+    global $config;
+    
+    if ($config["folder"] != "") {
+        return "/" . $config["folder"] . "/" . $page;
+    }
+    else {
+        return "/" . $page;
+    }
+}
+
 // Redirects the user to the specified page. If blank it defaults to the homepage.
 function redirect($text) {
     global $config;
@@ -125,6 +136,79 @@ function title() {
 function isMod() {
     if ($_SESSION["signed_in"] and (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) return true;
     else return false;
+}
+
+function validateUsername($username) {
+    global $config;
+    if (strlen($username) < 1) {
+        return "Your username cannot be blank.";
+    }
+    if (strlen($username) > 24) {
+        return "Your username cannot be longer than 24 characters.";
+    }
+    // Make sure the username isnt taken.
+    if ($config["installed"] and $db->query("SELECT 1 FROM `users` WHERE `username`='" . $db->real_escape_string($username) . "'")->num_rows > 0) {
+        return "Your username is already taken.";
+    }
+    return "";
+}
+
+function validateEmail($email) {
+    global $config;
+    if (strlen($email) < 1) {
+        return "Your email cannot be blank.";
+    }
+    if (strlen($email) > 255) {
+        return "Your email cannot be more than 255 characters long.";
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return "Your email is invalid.";
+    }
+    // Make sure the email isnt taken.
+    if ($config["installed"] and $db->query("SELECT 1 FROM `users` WHERE `email`='" . $db->real_escape_string($email) . "'")->num_rows > 0) {
+        return "Your email is already taken.";
+    }
+}
+
+function validatePassword($password, $confirm) {
+    global $config;
+    if (strlen($password) < 1) {
+        return "Your password cannot be blank.";
+    }
+    if (strlen($password) < $config["minPasswordLength"]) {
+        return "Your password cannot be less than {$config["minPasswordLength"]} characters.";
+    }
+    if ($password != $confirm) {
+        return "Your passwords do not match.";
+    }
+}
+
+function renderPagination($type, $currentPage, $pages) {
+    global $url;
+    
+    $content = "";
+    $content .= "<div class='pagination'>";
+    $content .= "<div class='paginationleft'>";
+		
+    if ($currentPage == 1) {
+        $content .= "<span>First page</span> <span>Previous page</span>";
+    }
+    else {
+        $content .= "<a href='" . makeURL("{$type}/{$url[1]}/1") . "'>First page</a> <a href='" . makeURL("{$type}/{$url[1]}/" . ($currentPage - 1)) . "'>Previous page</a>";
+    }
+	
+    $content .= "</div><div class='paginationright'>";
+	
+    if ($currentPage == $pages) {
+        $content .= "<span>Next page</span> <span>Last page</span>";
+    }
+    else {
+        $content .= "<a href='" . makeURL("{$type}/{$url[1]}/" . ($currentPage + 1)) . "'>Next page</a> <a href='" . makeURL("{$type}/{$url[1]}/{$pages}") . "'>Last page</a>";
+    }
+	
+    $content .= "</div></div>";
+    
+    echo($content);
 }
 
 ?>

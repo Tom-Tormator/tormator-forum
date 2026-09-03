@@ -17,7 +17,7 @@ if (($_SESSION["role"] == "Administrator") and !$success and ($catcheck->num_row
  <label>Category description:</label>
  <textarea name='cat_description'><?php echo(htmlspecialchars($_POST["cat_description"] ?? "")); ?></textarea>
  <br>
- <input type='submit' value='Add category'>
+ <input type='submit' class='item' value='Add category'>
 </form>
 
 <?php endif; require "views/footer.php"; ?>

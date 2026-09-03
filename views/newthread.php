@@ -26,7 +26,7 @@ if ($_SESSION["signed_in"] and ($cats->num_rows > 0) and !$success):
  <label for='postcontent'>Content:</label>
  <textarea name='postcontent' id='postcontent' class='postTextbox'><?php echo(htmlspecialchars($_POST["postcontent"] ?? "")); ?></textarea>
  <br>
- <input type="submit" value="Create thread">
+ <input type="submit" class='item' value="Create thread">
 </form>
 
 <?php endif; require "views/footer.php"; ?>

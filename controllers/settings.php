@@ -18,23 +18,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password_query = $db->query("SELECT `password` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
         $p = $password_query->fetch_assoc();
         
-        if (strlen($_POST["newusername"]) < 1) {
-            message("New username cannot be blank.");
+        $errors = array();
+        
+        if ($_POST["newusername"] == $_SESSION["username"]) {
+            $errors[] = "New username cannot be the same as old username.";
         }
-        elseif ($_POST["newusername"] == $_SESSION["username"]) {
-            message("New username cannot be the same as old username.");
+        else {
+            $errors[] = validateUsername($_POST["newusername"] ?? "");
         }
-        elseif (strlen($_POST["newusername"]) > 24) {
-            message("New username cannot be longer than 24 characters.");
+
+        if (!password_verify($_POST["confirmpass"] ?? "", $p["password"])) {
+            $errors[] = "Incorrect password.";
         }
-        elseif (!ctype_alnum($_POST["newusername"])) {
-            message("New username cannot contain non-alphanumeric characters.");
-        }
-        elseif ($db->query("SELECT 1 FROM `users` WHERE `username`='" . $db->real_escape_string($_POST["newusername"]) . "'")->num_rows > 0) {
-            message("New username is already taken.");
-        }
-        elseif (!password_verify($_POST["confirmpass"] ?? "", $p["password"])) {
-            message("Incorrect password.");
+
+        if (count($errors) != 0) {
+            foreach($errors as $error) {
+                message($error);
+            }
         }
         else {
             $result = $db->query("UPDATE `users` SET `username`='" . $db->real_escape_string($_POST["newusername"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
