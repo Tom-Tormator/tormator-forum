@@ -5,14 +5,21 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
+// Build a URL, accounting for mod_rewrite and non-web root installs.
 function makeURL($page) {
     global $config;
     
+    $index = "";
+    if (!$config["modRewrite"]) {
+        if ($page == "") $index = "index.php";
+        else $index = "index.php/?url=";
+    }
+    
     if ($config["folder"] != "") {
-        return "/" . $config["folder"] . "/" . $page;
+        return "/" . $config["folder"] . "/" . $index . $page;
     }
     else {
-        return "/" . $page;
+        return "/" . $index . $page;
     }
 }
 

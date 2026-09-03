@@ -119,6 +119,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (str_starts_with($dirtest[$lasti], "index.php")) array_pop($dirtest);
         $dir = trim(implode("/", $dirtest), "/");
         $config["folder"] = $dir;
+        
+        if (function_exists("apache_get_modules") and in_array("mod_rewrite", apache_get_modules())) {
+            $config["modRewrite"] = true;
+        }
 
         message("Database successfully written.");
         $config["installed"] = true;

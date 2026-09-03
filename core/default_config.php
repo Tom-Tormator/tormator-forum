@@ -17,6 +17,8 @@ $default_config = array(
     "MySQLDatabase" => "",
     // The folder the forum is installed in if applicable.
     "folder" => "",
+    // Whether or not mod_rewrite is enabled.
+    "modRewrite" => false,
     // Userid of the main admin, their role cannot be changed by other admins.
     "mainAdmin" => 1,
     // The prefix of cookies set by the forum.
