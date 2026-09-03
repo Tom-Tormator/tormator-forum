@@ -15,7 +15,7 @@ $title = "Sign up";
 $success = false;
 
 if ($_SESSION["signed_in"]) {
-    message("You are already signed in, you can <a href='/logout/'>log out</a> if you want.");
+    message("You are already signed in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.");
     require("views/signup.php");
     exit();
 }
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             message("Something went wrong while registering. Please try again later.");
         }
         else {
-            message("Successfully registered. You can now <a href='/login/'>log in</a> and start posting! :-)");
+            message("Successfully registered. You can now <a href='" . makeURL("login") . "'>log in</a> and start posting! :-)");
             $success = true;
         }
     }

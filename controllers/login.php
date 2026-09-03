@@ -14,7 +14,7 @@ if (!defined("INDEXED")) exit;
 $title = "Log in";
 
 if ($_SESSION["signed_in"]) {
-    message("You are already signed in, you can <a href='/logout/'>log out</a> if you want.");
+    message("You are already signed in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.");
     require("views/login.php");
     exit();
 }
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='" . hash("sha256", $_SERVER["REMOTE_ADDR"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
 
-        message("Welcome, " . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . ". <a href='/'>Proceed to the forum overview</a>.");
+        message("Welcome, " . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . ". <a href='" . makeURL("") . "'>Proceed to the forum overview</a>.");
     }
 }
 
