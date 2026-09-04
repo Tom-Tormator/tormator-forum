@@ -15,7 +15,7 @@ $title = "New thread";
 $success = false;
 
 if (!$_SESSION["signed_in"]) {
-	message("Sorry, you have to be <a href='/login/'>logged in</a> to create a thread.");
+	message("Sorry, you have to be <a href='" . makeURL("login") . "'>logged in</a> to create a thread.");
 	require "views/newthread.php";
 	exit();
 }
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             else {
                 $db->query("COMMIT");
 					
-                message('You have successfully created <a href="/thread/'. $threadid . '/">your new thread</a>.');
+                message("You have successfully created <a href='" . makeURL("thread/{$threadid}") . "'>your new thread</a>.");
                 $success = true;
             }
         }

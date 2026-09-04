@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             message("Something went wrong.");
         }
         else {
-            message("New category successfully added. Return to the <a href='/'>main page</a>?");
+            message("New category successfully added. Return to the <a href='" . makeURL("") . "'>main page</a>?");
             $success = true;
         }
     }

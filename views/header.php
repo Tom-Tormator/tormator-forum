@@ -15,7 +15,7 @@ if (!defined("INDEXED")) exit;
 <head>
  <meta charset="UTF-8">
  <title><?php title(); ?></title>
- <link rel="stylesheet" href="/themes/<?php echo($config["theme"]); ?>/style.css">
+ <link rel="stylesheet" href="<?php echo(makeURL("themes/{$config["theme"]}/style.css", true)); ?>">
 </head>
 <body>
  <div id="wrapper">

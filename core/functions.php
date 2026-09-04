@@ -12,11 +12,11 @@
 if (!defined("INDEXED")) exit;
 
 // Build a URL, accounting for mod_rewrite and non-web root installs.
-function makeURL($page) {
+function makeURL($page, $file=false) {
     global $config;
     
     $index = "";
-    if (!$config["modRewrite"]) {
+    if (!$config["modRewrite"] and !$file) {
         if ($page == "") $index = "index.php";
         else $index = "index.php/?url=";
     }
