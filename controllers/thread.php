@@ -235,7 +235,7 @@ require "views/thread.php";
 
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {
-    $action = "Viewing: <a href='/thread/{$thread["threadid"]}/'>" . htmlspecialchars($thread["title"], ENT_NOQUOTES) . "</a>";
+    $action = "Viewing: <a href='" . makeURL("thread/{$thread["threadid"]}") . "'>" . htmlspecialchars($thread["title"], ENT_NOQUOTES) . "</a>";
     update_last_action($action);
 }
 

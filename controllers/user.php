@@ -57,7 +57,7 @@ $threads = $threads_query->num_rows;
 			
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {
-    $action = "Viewing: <a href='/user/{$user["userid"]}/'>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "'s Profile</a>";
+    $action = "Viewing: <a href='" . makeURL("user/{$user["userid"]}") . "'>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "'s Profile</a>";
     update_last_action($action);
 }
 
