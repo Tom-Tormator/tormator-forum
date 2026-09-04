@@ -18,6 +18,7 @@ $success = false;
 if ($_SESSION["role"] != "Administrator") {
     message("This page is unavailable to non-admins.", "error");
     require "views/newcategory.php";
+    exit();
 }
 
 // Check how many categories there are. If the limit has been reached show a message.
@@ -25,6 +26,7 @@ $catcheck = $db->query("SELECT 1 FROM categories");
 if ($catcheck->num_rows >= $config["maxCats"]) {
     message("Sorry, no more new categories can be created at this time.", "error");
     require "views/newcategory.php";
+    exit();
 }
 
 if (validateToken()) {
