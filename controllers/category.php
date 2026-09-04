@@ -18,7 +18,7 @@ if ($category->num_rows < 1) {
     http_response_code(404);
     $title = "Not found";
     message("This category does not exist.", "error");
-    require "views/category.php";
+    require "views/error.php";
     exit();
 }
 
@@ -50,6 +50,8 @@ $threads = $db->query("SELECT * FROM threads WHERE category='" . $db->real_escap
 
 if ($threads->num_rows < 1) {
     message("There are no threads in this category yet.");
+    require "views/error.php";
+    exit();
 }
 
 require "views/category.php";

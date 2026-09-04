@@ -19,7 +19,7 @@ if ($thread_query->num_rows < 1) {
     http_response_code(404);
     $title = "Not found";
     message("The specified thread doesn't exist.", "error");
-    require "views/thread.php";
+    require "views/error.php";
     exit();
 }
 

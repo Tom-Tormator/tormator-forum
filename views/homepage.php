@@ -13,8 +13,6 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if ($category_query->num_rows > 0):
-
 ?><table class='categories'>
  <tr>
   <th>Category</th>
@@ -65,4 +63,4 @@ while ($category = $category_query->fetch_assoc()) {
 ?>
 </table>
 
-<?php endif; require "views/footer.php"; ?>
+<?php require "views/footer.php"; ?>

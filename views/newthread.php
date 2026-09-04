@@ -13,7 +13,7 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if ($_SESSION["signed_in"] and ($cats->num_rows > 0) and !$success):
+if (!$success):
 ?><h2>Create a thread</h2>
 		
 <form method='post' class='form'>

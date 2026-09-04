@@ -15,7 +15,7 @@ $title = "Settings";
 
 if (!$_SESSION["signed_in"]) {
     message("You must be logged in to change user settings.", "error");
-    require "views/settings.php";
+    require "views/error.php";
     exit();
 }
 

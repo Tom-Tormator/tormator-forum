@@ -17,7 +17,7 @@ $success = false;
 // Disallow non-admins from using this page.
 if ($_SESSION["role"] != "Administrator") {
     message("This page is unavailable to non-admins.", "error");
-    require "views/newcategory.php";
+    require "views/error.php";
     exit();
 }
 
@@ -25,7 +25,7 @@ if ($_SESSION["role"] != "Administrator") {
 $catcheck = $db->query("SELECT 1 FROM categories");
 if ($catcheck->num_rows >= $config["maxCats"]) {
     message("Sorry, no more new categories can be created at this time.", "error");
-    require "views/newcategory.php";
+    require "views/error.php";
     exit();
 }
 

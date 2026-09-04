@@ -16,7 +16,7 @@ $success = false;
 
 if ($_SESSION["signed_in"]) {
     message("You are already signed in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.", "error");
-    require("views/signup.php");
+    require("views/error.php");
     exit();
 }
 

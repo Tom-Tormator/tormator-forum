@@ -139,6 +139,7 @@ if (validateToken()) {
         flushConfig();
         
         // Log the admin in.
+        session_regenerate_id(true);
         $_SESSION["signed_in"] = true;
         $_SESSION["userid"] = $config["mainAdmin"];
         $_SESSION["username"] = $_POST["username"];

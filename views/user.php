@@ -12,16 +12,22 @@
 if (!defined("INDEXED")) exit;
 
 require "views/header.php";
-
-if ($user_info->num_rows > 0):
 			
-if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] != $_SESSION["userid"])) {
+if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] != $_SESSION["userid"]) and canChangeRole($_SESSION["role"], $user["role"], "Suspended")) {
     echo "<div class='usertop' style='background: #" . htmlspecialchars($user["color"]) . ";'>
     <b>" . htmlspecialchars($user["username"]) . "</b> <small>
     <form method='post'>
     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
     <select name='role'>";
-    $roles = array("Administrator", "Moderator", "Member", "Suspended");
+    if ($_SESSION["userid"] == $config["mainAdmin"]) {
+        $roles = array("Administrator", "Moderator", "Member", "Suspended");
+    }
+    elseif ($_SESSION["role"] == "Administrator") {
+        $roles = array("Moderator", "Member", "Suspended");
+    }
+    elseif ($_SESSION["role"] == "Moderator") {
+        $roles = array("Member", "Suspended");
+    }
     foreach ($roles as $role) {
         echo("<option value='{$role}'" . (($role == $user["role"]) ? " selected" : "") . ">{$role}</option>");
     }
@@ -39,8 +45,6 @@ echo("<div class='userbottom'>
     <span>Threads: {$threads}</span>
     <span>Verified: {$verified}</span>
     </div>");
-
-endif;
 
 require "views/footer.php";
 

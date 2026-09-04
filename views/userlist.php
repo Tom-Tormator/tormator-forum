@@ -13,7 +13,6 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if ($users_query->num_rows > 0):
 ?>
 
 <h2>Userlist</h2>
@@ -27,4 +26,4 @@ while ($user = $users_query->fetch_assoc()) {
 }
 ?>
 </div>
-<?php endif; require "views/footer.php"; ?>
+<?php require "views/footer.php"; ?>

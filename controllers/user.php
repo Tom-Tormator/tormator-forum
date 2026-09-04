@@ -16,9 +16,11 @@ $user_info = $db->query("SELECT * FROM users WHERE userid='" . $db->real_escape_
 
 if ($user_info->num_rows < 1) {
     message("No such user.", "error");
-    require "views/user.php";
+    require "views/error.php";
     exit();
 }
+
+$user = $user_info->fetch_assoc();
 
 if (validateToken()) {
     if (!isMod()) {
@@ -30,6 +32,12 @@ if (validateToken()) {
     elseif ($url[1] == $config["mainAdmin"]) {
         message("You cannot change the main admin's role.", "error");
     }
+    elseif (!canChangeRole($_SESSION["role"], $user["role"], $_POST["role"])) {
+        message("You cannot change this user's role.");
+    }
+    elseif ($user["role"] == $_POST["role"]) {
+        message("Nothing to change.", "info");
+    }
     else {
         $setrole = $db->query("UPDATE `users` SET `role`='" . $db->real_escape_string($_POST["role"]) . "' WHERE `userid`='" . $db->real_escape_string($url[1]) . "'");
 
@@ -37,12 +45,11 @@ if (validateToken()) {
             message("Failed to change role.", "error");
         }
         else {
-            refresh(0);
+            message("Successfully changed role.", "success");
+            $user["role"] = $_POST["role"];
         }
     }
 }
-		
-$user = $user_info->fetch_assoc();
 
 if ($user["verified"] == "1") $verified = "Yes";
 else $verified = "No";

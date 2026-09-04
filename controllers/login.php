@@ -15,7 +15,7 @@ $title = "Log in";
 
 if ($_SESSION["signed_in"]) {
     message("You are already logged in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.", "error");
-    require("views/login.php");
+    require("views/error.php");
     exit();
 }
 
@@ -40,6 +40,7 @@ if (validateToken()) {
         message("Incorrect password.", "error");
     }
     else {
+        session_regenerate_id(true);
         $_SESSION["signed_in"] = true;
         $_SESSION["userid"] = $user_info["userid"];
         $_SESSION["username"] = $user_info["username"];

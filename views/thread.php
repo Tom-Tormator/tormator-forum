@@ -13,8 +13,6 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if ($thread_query->num_rows > 0):
-
 echo("<div class='threadnavbar'>");
 echo("<a class='item' href='" . makeURL("category/{$thread["category"]}") . "'>Back to category</a>");
 echo("<div class='threadButtons'>");
@@ -127,7 +125,7 @@ if ($numPosts > $config["postsPerPage"]) {
 }
 
 if (!$_SESSION["signed_in"]) {
-    message("You must be signed in to post.");
+    echo(htmlMessage("You must be signed in to post.", "error"));
 }
 elseif ((!$thread["locked"]) or (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
     echo("<form method='post'>
@@ -138,10 +136,9 @@ elseif ((!$thread["locked"]) or (($_SESSION["role"] == "Moderator") or ($_SESSIO
     </form>");
 }
 else {
-    message("Sorry, this thread is locked. Only moderators and administrators can post in it.");
+    echo(htmlMessage("Sorry, this thread is locked. Only moderators and administrators can post in it.", "error"));
 }
 
-endif;
 endif;
 
 require "views/footer.php";

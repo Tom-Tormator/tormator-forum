@@ -16,7 +16,7 @@ $success = false;
 
 if (!$_SESSION["signed_in"]) {
 	message("Sorry, you have to be <a href='" . makeURL("login") . "'>logged in</a> to create a thread.", "error");
-	require "views/newthread.php";
+	require "views/error.php";
 	exit();
 }
 
@@ -85,6 +85,8 @@ if ($cats->num_rows < 1) {
     else {
         message("Before you can post a topic, you must wait for an admin to create some categories.", "error");
     }
+    require "views/error.php";
+    exit();
 }
 
 require "views/newthread.php";

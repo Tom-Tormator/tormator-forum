@@ -13,8 +13,6 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if (($category->num_rows > 0) and ($threads->num_rows > 0)):
-
 echo("<h2>" . htmlspecialchars($cat["categoryname"], ENT_NOQUOTES) . "</h2>");
 
 if ($numThreads > $config["threadsPerPage"]) {
@@ -68,8 +66,6 @@ echo "</table>";
 if ($numThreads > $config["threadsPerPage"]) {
     renderPagination("category", $currentPage, $pages);
 }
-
-endif;
 
 require "views/footer.php";
 

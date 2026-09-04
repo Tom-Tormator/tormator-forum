@@ -77,10 +77,16 @@ function update_last_action($action) {
 // Display a nice message.
 function message($content, $type="info") {
     global $messages;
-	$messages[] = "<div class='message {$type}'>" . $content . "</div>";
+	$messages[] = htmlMessage($content, $type);
+}
+
+// Return a nice message.
+function htmlMessage($content, $type="info") {
+	return "<div class='message {$type}'>" . $content . "</div>";
 }
 
 // Convert a unix timestamp into a human readable time format.
+// These are very advanced and delicate calculations that took years to perfect.
 function relativeTime($timestamp) {
 	$diff = time() - $timestamp;
 	
@@ -96,51 +102,51 @@ function relativeTime($timestamp) {
 		return $diff . " seconds ago";
 	}
 	
-	elseif (($diff >= 60) and ($diff <= 120)) {
+	elseif (($diff >= 60) and ($diff < 120)) {
 		return "1 minute ago";
 	}
 	
-	elseif (($diff > 120) and ($diff < 3600)) {
+	elseif (($diff >= 120) and ($diff < 3600)) {
 		return round($diff / 60) . " minutes ago";
 	}
 	
-	elseif (($diff >= 3600) and ($diff <= 7200)) {
+	elseif (($diff >= 3600) and ($diff < 7200)) {
 		return "1 hour ago";
 	}
 	
-	elseif (($diff > 7200) and ($diff < 86400)) {
+	elseif (($diff >= 7200) and ($diff < 86400)) {
 		return round(($diff / 60) / 60) . " hours ago";
 	}
 	
-	elseif (($diff >= 86400) and ($diff <= 172800)) {
+	elseif (($diff >= 86400) and ($diff < 172800)) {
 		return "1 day ago";
 	}
 	
-	elseif (($diff > 172800) and ($diff < 604800)) {
+	elseif (($diff >= 172800) and ($diff < 604800)) {
 		return round((($diff / 60) / 60) / 24) . " days ago";
 	}
 	
-	elseif (($diff >= 604800) and ($diff <= 1209600)) {
+	elseif (($diff >= 604800) and ($diff < 1209600)) {
 		return "1 week ago";
 	}
 	
-	elseif (($diff > 1209600) and ($diff < 2419200)) {
+	elseif (($diff >= 1209600) and ($diff < 2629746)) {
 		return round(((($diff / 60) / 60) / 24) / 7) . " weeks ago";
 	}
 	
-	elseif (($diff >= 2419200) and ($diff <= 4838400)) {
+	elseif (($diff >= 2629746) and ($diff < 5259492)) {
 		return "1 month ago";
 	}
 	
-	elseif (($diff > 4838400) and ($diff < 29030400)) {
+	elseif (($diff >= 5259492) and ($diff < 31556952)) {
 		return round((((($diff / 60) / 60) / 24) / 7) / 4) . " months ago";
 	}
 	
-	elseif (($diff >= 29030400) and ($diff <= 58060800)) {
+	elseif (($diff >= 31556952) and ($diff < 63113904)) {
 		return "1 year ago";
 	}
 	
-	elseif ($diff > 58060800) {
+	elseif ($diff >= 63113904) {
 		return round(((((($diff / 60) / 60) / 24) / 7) / 4) / 12) . " years ago";
 	}
 }
@@ -237,6 +243,58 @@ function renderPagination($type, $currentPage, $pages) {
     $content .= "</div></div>";
     
     echo($content);
+}
+
+function canChangeRole($subjectRole, $victimRole, $to) {
+    global $config;
+    if (!$_SESSION["signed_in"]) return false;
+    // The main admin can always change a role.
+    if ($_SESSION["userid"] == $config["mainAdmin"]) return true;
+    if (($subjectRole == "Administrator")) {
+        switch ($victimRole) {
+            case "Administrator":
+                return false;
+            case "Moderator":
+            case "Member":
+            case "Suspended":
+                break;
+            default:
+                return false;
+        }
+        switch ($to) {
+            case "Administrator":
+                return false;
+            case "Moderator":
+            case "Member":
+            case "Suspended":
+                return true;
+            default:
+                return false;
+        }
+    }
+    elseif ($subjectRole == "Moderator") {
+        switch ($victimRole) {
+            case "Administrator":
+            case "Moderator":
+                return false;
+            case "Member":
+            case "Suspended":
+                break;
+            default:
+                return false;
+        }
+        switch ($to) {
+            case "Administrator":
+            case "Moderator":
+                return false;
+            case "Member":
+            case "Suspended":
+                return true;
+            default:
+                return false;
+        }
+    }
+    else return false;
 }
 
 /* PHP 7.X compatibility. */

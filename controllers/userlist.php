@@ -18,6 +18,8 @@ $users_query = $db->query("SELECT * FROM users ORDER BY userid ASC");
 
 if ($users_query->num_rows < 1) {
     message("Sadly, there are currently no users on the forum.");
+    require "views/error.php";
+    exit();
 }
 
 require "views/userlist.php";

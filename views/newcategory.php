@@ -13,7 +13,7 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-if (($_SESSION["role"] == "Administrator") and !$success and ($catcheck->num_rows < $config["maxCats"])):
+if (!$success):
 ?>
 
 <h2>Create a category</h2>
