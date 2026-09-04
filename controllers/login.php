@@ -14,12 +14,12 @@ if (!defined("INDEXED")) exit;
 $title = "Log in";
 
 if ($_SESSION["signed_in"]) {
-    message("You are already signed in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.");
+    message("You are already logged in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.", "error");
     require("views/login.php");
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (validateToken()) {
     $_POST["user_name"] = $_POST["user_name"] ?? "";
     $_POST["user_pass"] = $_POST["user_pass"] ?? "";
     
@@ -27,17 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_info = $password_query->fetch_assoc();
 		
     if (strlen($_POST["user_name"]) < 1) {
-        message("Your username cannot be blank.");
+        message("Your username cannot be blank.", "error");
     }
     elseif (!$password_query->num_rows) {
-        message("The specified user doesn't exist.");
+        message("The specified user doesn't exist.", "error");
     }
     elseif (strlen($_POST["user_pass"]) < 1) {
-        message("Your password cannot be blank.");
+        message("Your password cannot be blank.", "error");
     }
     // Now check if the password is correct.
     elseif (!password_verify($_POST["user_pass"] ?? "", $user_info["password"])) {
-        message("Incorrect password.");
+        message("Incorrect password.", "error");
     }
     else {
         $_SESSION["signed_in"] = true;
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='" . hash("sha256", $_SERVER["REMOTE_ADDR"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
 
-        message("Welcome, " . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . ". <a href='" . makeURL("") . "'>Proceed to the forum overview</a>.");
+        message("Welcome, " . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . ". <a href='" . makeURL("") . "'>Proceed to the forum overview</a>.", "success");
     }
 }
 

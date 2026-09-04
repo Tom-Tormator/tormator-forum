@@ -5,6 +5,9 @@
  */
 /* Blue theme */
 /* Main styles. */
+:root {
+ --border-color: #444;
+}
 html {
  font-family: Arial, sans-serif;
 }
@@ -12,30 +15,36 @@ body {
  background-color: #dfdfdf;
  margin: 0 auto;
 }
+h1 {
+ margin: 0;
+}
+h2 {
+ margin-top: 0;
+}
 #wrapper {
  max-width: 1200px;
  margin: auto;
 }
 #header {
  background: linear-gradient(#1498d4, #0c56a1);
- border: 1px solid black;
+ border: 1px solid #110d8e;
  border-top: none;
- border-bottom: none;
  width: 100%;
- padding: 8px 16px;
+ padding: 24px 16px;
  box-sizing: border-box;
  color: white;
 }
 #content {
- background-color: #fff;
- border: 1px solid #000;
- padding: 8px 16px;
+ background-color: white;
+ border: 1px solid var(--border-color);
+ padding: 16px 16px;
  width: 100%;
  box-sizing: border-box;
 }
 #menu {
- border: 1px solid #000;
- border-bottom: none;
+ border: 1px solid var(--border-color);
+ border-top: none;
+ border-bottom: none; 
  width: 100%;
  padding: 8px 16px;
  background-color: white;
@@ -59,11 +68,10 @@ body {
  border-bottom-left-radius: 6px;
  border-bottom-right-radius: 6px;
  clear: both;
- border-bottom: 1px solid black;
- border-left: 1px solid black;
- border-right: 1px solid black;
+ border: 1px solid var(--border-color);
+ border-top: none;
  background: white;
- padding: 8px 16px;
+ padding: 16px 16px;
  width: 100%;
  box-sizing: border-box;
 }
@@ -107,12 +115,12 @@ table a:hover {
 th {
  background: linear-gradient(#1498d4, #0c56a1);
  color: white;
- border: 1px solid black;
+ border: 1px solid #003b97;
  padding: 4px 8px;
 }
 td {
  padding: 4px 8px;
- border: 1px solid black;
+ border: 1px solid var(--border-color);
 }
 tr:nth-child(even) {
  background: linear-gradient(#edfbff, #dee9ec);
@@ -123,7 +131,7 @@ tr:nth-child(even) {
 .message {
  border: 1px solid black;
  border-radius: 4px;
- background: yellow;
+ background: grey;
  padding: 5px;
  margin-bottom: 4px;
 }
@@ -134,6 +142,18 @@ tr:nth-child(even) {
 .message a:hover {
  text-decoration: underline;
  color: #5555ee;
+}
+.info {
+ background: linear-gradient(#fffb00, #ffe300);
+ border-color: goldenrod;
+}
+.error {
+ background: linear-gradient(#ff6e6e, #ff4b4b);
+ border-color: #a61515;
+}
+.success {
+ background: linear-gradient(#17ff17, #00ca00);
+ border-color: darkgreen;
 }
 
 /* Pagination styles. */
@@ -221,6 +241,7 @@ tr:nth-child(even) {
 .posts {
  display: grid;
  gap: 6px;
+ margin: 6px 0 6px 0;
 }
 .post {
   border-radius: 4px;
@@ -267,6 +288,7 @@ tr:nth-child(even) {
 }
 .threadnavbar {
  display: flex;
+ margin-bottom: 4px;
 }
 .threadButtons {
  display: flex;

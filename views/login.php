@@ -17,12 +17,13 @@ require "views/header.php";
 <?php if (!$_SESSION["signed_in"]): ?>
 <h3>Log in</h3>
 <form method='post' class='form'>
+ <input type='hidden' name='token' value='<?php echo($_SESSION["token"]); ?>'>
  <label for='user_name'>Username:</label>
  <input type='text' name='user_name' id='user_name' value='<?php echo(htmlspecialchars($_POST["user_name"] ?? "")); ?>'>
  <label for='user_pass'>Password:</label>
  <input type='password' name='user_pass' id='user_pass'>
  <br>
- <input type='submit' value='Log in'>
+ <input type='submit' class='item' value='Log in'>
 </form>
 <?php endif; ?>
 

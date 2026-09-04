@@ -53,6 +53,21 @@ function logout() {
 	redirect("");
 }
 
+function generateToken() {
+    $_SESSION["token"] = bin2hex(random_bytes(32));
+}
+
+function validateToken() {
+    if (($_POST["token"] ?? "") == $_SESSION["token"]) {
+        // Regenerate the token.
+        generateToken();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 // Update the user's last action and set their last active time to now.
 function update_last_action($action) {
 	global $db;
@@ -60,9 +75,9 @@ function update_last_action($action) {
 }
 
 // Display a nice message.
-function message($content) {
+function message($content, $type="info") {
     global $messages;
-	$messages[] = "<div class='message'>" . $content . "</div>";
+	$messages[] = "<div class='message {$type}'>" . $content . "</div>";
 }
 
 // Convert a unix timestamp into a human readable time format.
@@ -152,7 +167,7 @@ function isMod() {
 }
 
 function validateUsername($username) {
-    global $config;
+    global $config, $db;
     if (strlen($username) < 1) {
         return "Your username cannot be blank.";
     }
@@ -167,7 +182,7 @@ function validateUsername($username) {
 }
 
 function validateEmail($email) {
-    global $config;
+    global $config, $db;
     if (strlen($email) < 1) {
         return "Your email cannot be blank.";
     }
@@ -222,6 +237,13 @@ function renderPagination($type, $currentPage, $pages) {
     $content .= "</div></div>";
     
     echo($content);
+}
+
+/* PHP 7.X compatibility. */
+if (!function_exists("str_starts_with")) {
+    function str_starts_with(string $haystack, string $needle) {
+        return (substr($haystack, 0, strlen($needle)) === $needle);
+    }
 }
 
 ?>

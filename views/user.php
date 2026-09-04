@@ -16,7 +16,11 @@ require "views/header.php";
 if ($user_info->num_rows > 0):
 			
 if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] != $_SESSION["userid"])) {
-    echo "<div class='usertop' style='background: #" . htmlspecialchars($user["color"]) . ";'><b>" . htmlspecialchars($user["username"]) . "</b> <small><form method='post' action=''><select name='role'>";
+    echo "<div class='usertop' style='background: #" . htmlspecialchars($user["color"]) . ";'>
+    <b>" . htmlspecialchars($user["username"]) . "</b> <small>
+    <form method='post'>
+    <input type='hidden' name='token' value='{$_SESSION["token"]}'>
+    <select name='role'>";
     $roles = array("Administrator", "Moderator", "Member", "Suspended");
     foreach ($roles as $role) {
         echo("<option value='{$role}'" . (($role == $user["role"]) ? " selected" : "") . ">{$role}</option>");

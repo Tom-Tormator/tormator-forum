@@ -17,7 +17,7 @@ $category = $db->query("SELECT * FROM categories WHERE categoryid='" . $db->real
 if ($category->num_rows < 1) {
     http_response_code(404);
     $title = "Not found";
-    message("This category does not exist.");
+    message("This category does not exist.", "error");
     require "views/category.php";
     exit();
 }

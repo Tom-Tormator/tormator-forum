@@ -29,6 +29,9 @@ require "core/functions.php";
 // If a session doesn't exist, set one.
 if (!session_id()) {
     session_name($config["cookiePrefix"] . "Session");
+    session_set_cookie_params([
+    "httponly" => true,
+    "samesite" => "Strict"]);
     session_start();
 }
 
@@ -36,12 +39,12 @@ if (!session_id()) {
 if (!isset($_SESSION["signed_in"])) $_SESSION["signed_in"] = false;
 if (!isset($_SESSION["role"])) $_SESSION["role"] = "Guest";
 if (!isset($_SESSION["userid"])) $_SESSION["userid"] = "0";
+if (!isset($_SESSION["token"])) generateToken();
 
 // Check the user's role and ensure their session reflects it accordingly.
 if ($config["installed"] and $_SESSION["signed_in"]) {
     $rolecheck = $db->query("SELECT `role`, `verified` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
     $rc = $rolecheck->fetch_assoc();
-    // Probably will remove this later TODO
     if ($rc["role"] != $_SESSION["role"]) {
         $_SESSION["role"] = $rc["role"];
     }

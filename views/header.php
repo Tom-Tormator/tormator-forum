@@ -21,6 +21,7 @@ if (!defined("INDEXED")) exit;
  <div id="wrapper">
  <div id="header">
   <h1><?php echo(htmlspecialchars($config["forumName"], ENT_NOQUOTES)); ?></h1>
+  <?php echo(htmlspecialchars($config["forumDescription"], ENT_NOQUOTES)); ?>
  </div>
  <?php if ($config["installed"]): ?>
  <div id="menu">

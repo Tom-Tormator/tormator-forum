@@ -15,12 +15,12 @@ $title = "New thread";
 $success = false;
 
 if (!$_SESSION["signed_in"]) {
-	message("Sorry, you have to be <a href='" . makeURL("login") . "'>logged in</a> to create a thread.");
+	message("Sorry, you have to be <a href='" . makeURL("login") . "'>logged in</a> to create a thread.", "error");
 	require "views/newthread.php";
 	exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (validateToken()) {
     $_POST["title"] = $_POST["title"] ?? "";
     $_POST["category"] = $_POST["category"] ?? "";
     $_POST["postcontent"] = $_POST["postcontent"] ?? "";
@@ -29,22 +29,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $delaycheck = $db->query("SELECT 1 FROM `posts` WHERE `user`='" . $_SESSION["userid"] . "' AND `timestamp`>'" . (time() - $config["postDelay"]) . "'");
 		
     if (strlen($_POST["title"]) < 1) {
-        message("Your title cannot be blank.");
+        message("Your title cannot be blank.", "error");
     }	
     elseif (strlen($_POST["title"]) > $config["maxCharsPerTitle"]) {
-        message("Your title was too long.");
+        message("Your title was too long.", "error");
     }
     elseif (strlen($_POST["postcontent"]) < 1) {
-        message("Your post cannot be blank.");
+        message("Your post cannot be blank.", "error");
     }	
     elseif (strlen($_POST["postcontent"]) > $config["maxCharsPerPost"]) {
-        message("Your post was too long.");
+        message("Your post was too long.", "error");
     }
     elseif ($cat->num_rows < 1) {
-        message("Invalid category selection.");
+        message("Invalid category selection.", "error");
     }
     elseif ($delaycheck->num_rows > 0) {
-        message("You tried to post too soon after a previous post. You must wait " . $config["postDelay"] . " seconds between posts.");
+        message("You tried to post too soon after a previous post. You must wait " . $config["postDelay"] . " seconds between posts.", "error");
     }
     else {
         $beginwork = $db->query("BEGIN WORK");
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $threadresult = $db->query("INSERT INTO `threads` (`title`, `startuser`, `starttime`, `lastpostuser`, `lastposttime`, `category`) VALUES ('" . $db->real_escape_string($_POST["title"]) . "', '$userid', '$justnow', '$userid', '$justnow', '" . $db->real_escape_string($_POST["category"]) . "')");
 			
         if (!$threadresult) {
-            echo 'An error occured while inserting your thread. Please try again later.';
+            message("An error occured while inserting your thread. Please try again later.", "error");
             $db->query("ROLLBACK");
         }
         else {
@@ -63,13 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = $db->query("INSERT INTO `posts` (`thread`, `user`, `timestamp`, `content`) VALUES ('$threadid', '$userid', '$justnow', '" . $db->real_escape_string($_POST["postcontent"]) . "')");
 				
             if (!$result) {
-                echo 'An error occured while inserting your post. Please try again later.';
+                message("An error occured while inserting your post. Please try again later.", "error");
                 $db->query("ROLLBACK");
             }
             else {
                 $db->query("COMMIT");
 					
-                message("You have successfully created <a href='" . makeURL("thread/{$threadid}") . "'>your new thread</a>.");
+                message("You have successfully created <a href='" . makeURL("thread/{$threadid}") . "'>your new thread</a>.", "success");
                 $success = true;
             }
         }
@@ -80,10 +80,10 @@ $cats = $db->query("SELECT * FROM `categories`");
 
 if ($cats->num_rows < 1) {
     if ($_SESSION["role"] == "Administrator") {
-        message('You have not created categories yet.');
+        message("You have not created categories yet.", "error");
     }		
     else {
-        message("Before you can post a topic, you must wait for an admin to create some categories.");
+        message("Before you can post a topic, you must wait for an admin to create some categories.", "error");
     }
 }
 

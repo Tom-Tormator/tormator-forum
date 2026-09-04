@@ -32,6 +32,7 @@ $default_config = array(
     "theme" => "Blue",
     // The forum's name.
     "forumName" => "Tormator Forum",
+    "forumDescription" => "Lightweight, easy-to-use, free forum software.",
     // The text that appears on the footer.
     "footer" => "Powered by Tormator Forum",
     // Number of posts to display on a page in a thread.

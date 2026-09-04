@@ -17,6 +17,7 @@ if ($_SESSION["signed_in"] and ($cats->num_rows > 0) and !$success):
 ?><h2>Create a thread</h2>
 		
 <form method='post' class='form'>
+ <input type='hidden' name='token' value='<?php echo($_SESSION["token"]); ?>'>
  <label for='title'>Title:</label>
  <input type='text' name='title' id='title' value='<?php echo(htmlspecialchars($_POST["title"] ?? "")); ?>'>
  <label for='category'>Category:</label>

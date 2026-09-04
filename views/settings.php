@@ -18,6 +18,7 @@ if ($_SESSION["signed_in"]):
 
 <h3>Change color</h3>
 <form method='post' class='form'>
+ <input type='hidden' name='token' value='<?php echo($_SESSION["token"]); ?>'>
  <label for='color'>Color:</label>
  <input type='color' name='color' id='color' value='<?php echo(htmlspecialchars($_POST["color"] ?? "#" . $user_info["color"])); ?>'>
  <br>
@@ -25,6 +26,7 @@ if ($_SESSION["signed_in"]):
 </form>
 <h4>Change username</h4>
 <form method='post' class='form'>
+ <input type='hidden' name='token' value='<?php echo($_SESSION["token"]); ?>'>
  <label for='newusername'>New username:</label>
  <input type='text' name='newusername' id='newusername' value='<?php echo(htmlspecialchars($_POST["newusername"] ?? "")); ?>'>
  <label for='confirmpass'>Current password:</label>

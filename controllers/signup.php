@@ -15,21 +15,24 @@ $title = "Sign up";
 $success = false;
 
 if ($_SESSION["signed_in"]) {
-    message("You are already signed in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.");
+    message("You are already signed in, you can <a href='" . makeURL("logout") . "'>log out</a> if you want.", "error");
     require("views/signup.php");
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (validateToken()) {
     $errors = array();
 
-    $errors[] = validateUsername($_POST["user_name"] ?? "");
-    $errors[] = validateEmail($_POST["user_email"] ?? "");
-    $errors[] = validatePassword($_POST["user_pass"] ?? "", $_POST["user_pass_check"] ?? "");
+    $uiv = validateUsername($_POST["user_name"] ?? "");
+    if ($uiv) $errors[] = $uiv;
+    $eiv = validateEmail($_POST["user_email"] ?? "");
+    if ($eiv) $errors[] = $eiv;
+    $piv = validatePassword($_POST["user_pass"] ?? "", $_POST["user_pass_check"] ?? "");
+    if ($piv) $errors[] = $piv;
 
     if (count($errors) != 0) {
         foreach($errors as $error) {
-            message($error);
+            message($error, "error");
         }
     }
     else {
@@ -44,10 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						
         if (!$result) {
             // Something went wrong, display an error.
-            message("Something went wrong while registering. Please try again later.");
+            message("Something went wrong while signing up. Please try again later.", "error");
         }
         else {
-            message("Successfully registered. You can now <a href='" . makeURL("login") . "'>log in</a> and start posting! :-)");
+            message("Successfully signed up. You can now <a href='" . makeURL("login") . "'>log in</a> and start posting! :-)", "success");
             $success = true;
         }
     }

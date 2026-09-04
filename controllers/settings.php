@@ -14,12 +14,12 @@ if (!defined("INDEXED")) exit;
 $title = "Settings";
 
 if (!$_SESSION["signed_in"]) {
-    message("You must be logged in to change user settings.");
+    message("You must be logged in to change user settings.", "error");
     require "views/settings.php";
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (validateToken()) {
     if (isset($_POST["newusername"])) {
         $password_query = $db->query("SELECT `password` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
         $p = $password_query->fetch_assoc();
@@ -39,18 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (count($errors) != 0) {
             foreach($errors as $error) {
-                message($error);
+                message($error, "error");
             }
         }
         else {
             $result = $db->query("UPDATE `users` SET `username`='" . $db->real_escape_string($_POST["newusername"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
             if (!$result) {
-                message("Unable to change username.");
+                message("Unable to change username.", "error");
             }
             else {
                 $_SESSION["username"] = $_POST["newusername"];
                 $_POST["newusername"] = "";
-                message("Successfully changed username.");
+                message("Successfully changed username.", "success");
             }
         }
     }
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         else {
             $db->query("UPDATE `users` SET `color`='" . $db->real_escape_string($color) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
-            message("Successfully changed color.");
+            message("Successfully changed color.", "success");
         }
     }
 }

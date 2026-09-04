@@ -15,26 +15,26 @@ if (!defined("INDEXED")) exit;
 $user_info = $db->query("SELECT * FROM users WHERE userid='" . $db->real_escape_string($url[1]) . "'");
 
 if ($user_info->num_rows < 1) {
-    message("No such user.");
+    message("No such user.", "error");
     require "views/user.php";
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (validateToken()) {
     if (!isMod()) {
-        message("You don't have permission to do this.");
+        message("You don't have permission to do this.", "error");
     }
     elseif ($url[1] == $_SESSION["userid"]) {
-        message("You cannot change your own role.");
+        message("You cannot change your own role.", "error");
     }
     elseif ($url[1] == $config["mainAdmin"]) {
-        message("You cannot change the main admin's role.");
+        message("You cannot change the main admin's role.", "error");
     }
     else {
         $setrole = $db->query("UPDATE `users` SET `role`='" . $db->real_escape_string($_POST["role"]) . "' WHERE `userid`='" . $db->real_escape_string($url[1]) . "'");
 
         if (!$setrole) {
-            message("Failed to change role.");
+            message("Failed to change role.", "error");
         }
         else {
             refresh(0);

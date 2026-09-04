@@ -17,6 +17,7 @@ if (!$_SESSION["signed_in"] and !$success):
 ?><h3>Sign up</h3>
 
 <form method='post' class='form'>
+ <input type='hidden' name='token' value='<?php echo($_SESSION["token"]); ?>'>
  <label for='user_name'>Username:</label>
  <input type='text' name='user_name' id='user_name' value='<?php echo(htmlspecialchars($_POST["user_name"] ?? "")); ?>'>
  <label for='user_email'>Email:</label>
@@ -26,7 +27,7 @@ if (!$_SESSION["signed_in"] and !$success):
  <label for='user_pass_check'>Confirm password:</label>
  <input type='password' name='user_pass_check' id='user_pass_check' value='<?php echo(htmlspecialchars($_POST["user_pass_check"] ?? "")); ?>'>
  <br>
- <input type='submit' value='Register'>
+ <input type='submit' class='item' value='Sign up'>
 </form>
 
 <?php endif; require "views/footer.php"; ?>

@@ -20,6 +20,7 @@ echo("<a class='item' href='" . makeURL("category/{$thread["category"]}") . "'>B
 echo("<div class='threadButtons'>");
 if (isMod()) {
     echo "<form method='post'>
+     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
      <button name='deletethread' class='item'>Delete thread</button>
      <button name='togglelock' class='item'>" . ($thread["locked"] ? "Unlock" : "Lock") . "</button>
      <button name='togglesticky' class='item'>" . ($thread["sticky"] ? "Unsticky" : "Sticky") . "</button>
@@ -27,6 +28,7 @@ if (isMod()) {
 }
 elseif ($thread["startuser"] == $_SESSION["userid"]) {
     echo "<form method='post'>
+     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
      <button name='deletethread' class='item'>Delete thread</button>
     </form>";
 }
@@ -69,7 +71,8 @@ while ($row = $posts_query->fetch_assoc()) {
         and (($row["deletedby"] == $_SESSION["userid"]) or isMod())) {
             echo("<div class='postbuttons'>
             <form class='postc' method='post'>
-             <button class='item' name='restore' value='" . $row["postid"] . "'>Restore</button>
+             <input type='hidden' name='token' value='{$_SESSION["token"]}'>
+             <button class='item' name='restore' value='{$row["postid"]}'>Restore</button>
             </form>
             </div>");
         }
@@ -83,9 +86,10 @@ while ($row = $posts_query->fetch_assoc()) {
 		and (isMod() or ($u["userid"] == $_SESSION["userid"]))) {
 		    echo("<div class='postbuttons'>
 		    <form class='postc' method='post'>
-		     <button class='item' name='delete' value='" . $row["postid"] . "'>Delete</button>
-		     <button class='item' name='hide' value='" . $row["postid"] . "'>Hide</button>
-		     <button class='item' name='edit' value='" . $row["postid"] . "'>Edit</button>
+		     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
+		     <button class='item' name='delete' value='{$row["postid"]}'>Delete</button>
+		     <button class='item' name='hide' value='{$row["postid"]}'>Hide</button>
+		     <button class='item' name='edit' value='{$row["postid"]}'>Edit</button>
 		    </form>
 		    </div>");
 		}
@@ -96,13 +100,15 @@ while ($row = $posts_query->fetch_assoc()) {
 		and (isMod() or ($row["user"] == $_SESSION["userid"]))) {
 			echo "</div>
 			<form method='post'>
+			 <input type='hidden' name='token' value='{$_SESSION["token"]}'>
 			 <textarea name='saveedit' class='postTextbox'>" . htmlspecialchars($row["content"], ENT_NOQUOTES) . "</textarea>
-			 <input type='hidden' name='saveeditpostid' value='" . $row["postid"] . "'>
+			 <input type='hidden' name='saveeditpostid' value='{$row["postid"]}'>
 			 <div class='editbuttons'>
 			 <input type='submit' class='item' value='Save edit'>
 			</form>
 			<br>
 			<form method='post'>
+			 <input type='hidden' name='token' value='{$_SESSION["token"]}'>
 			 <button class='item' name='canceledit'>Cancel edit</button>
 			</form>
 			</div>";
@@ -125,9 +131,10 @@ if (!$_SESSION["signed_in"]) {
 }
 elseif ((!$thread["locked"]) or (($_SESSION["role"] == "Moderator") or ($_SESSION["role"] == "Administrator"))) {
     echo("<form method='post'>
-    <label for='newpost'>New post:</label>
-    <textarea name='content' class='postTextbox' id='newpost'>" . htmlspecialchars($_POST["content"] ?? "", ENT_NOQUOTES) . "</textarea>
-    <input class='item' type='submit' value='Submit post'>
+     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
+     <label for='newpost'>New post:</label>
+     <textarea name='content' class='postTextbox' id='newpost'>" . htmlspecialchars($_POST["content"] ?? "", ENT_NOQUOTES) . "</textarea>
+     <input class='item' type='submit' value='Submit post'>
     </form>");
 }
 else {

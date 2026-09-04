@@ -18,6 +18,7 @@ if (($_SESSION["role"] == "Administrator") and !$success and ($catcheck->num_row
 
 <h2>Create a category</h2>
 <form method='post' class='form'>
+ <input type='hidden' name='token' value='<?php echo($_SESSION["token"]); ?>'>
  <label>Category name:</label>
  <input type='text' name='cat_name' value='<?php echo(htmlspecialchars($_POST["cat_name"] ?? "")); ?>'>
  <label>Category description:</label>

@@ -17,7 +17,7 @@ if (!is_writable("config/")) {
     message("Config directory isn't writable.");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (validateToken()) {
     $errors = array();
     
     if (!is_writable("config/")) {
@@ -150,6 +150,7 @@ require "views/header.php";
 
 if (!$config["installed"]) {
     echo("<form method='post' class='form'>
+        <input type='hidden' name='token' value='{$_SESSION["token"]}'>
         <br><h2>Install</h2>
         <br><h3>SQL Details</h3>
         <label for='SQLHost'>SQL Host:</label>
