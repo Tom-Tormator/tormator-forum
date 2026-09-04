@@ -76,12 +76,12 @@ if (validateToken()) {
             }
             else {
                 $result = $db->query("INSERT INTO `posts` (`thread`, `user`, `timestamp`, `content`) VALUES ('" . $db->real_escape_string($url[1]) . "', '" . $_SESSION["userid"] . "', '" . time() . "', '" . $db->real_escape_string($_POST["content"]) . "')");
-                $update = $db->query("UPDATE `threads` SET `lastpostuser`='" . $_SESSION["userid"] . "', `lastposttime`='" . time() . "' WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
                     
                 if (!$result) {
                     message("Your reply has not been saved, please try again later.", "error");
                 }
                 else {
+                    $update = $db->query("UPDATE `threads` SET `lastpostuser`='" . $_SESSION["userid"] . "', `lastposttime`='" . time() . "' WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
                     if ($pages < ceil(($numPosts+1) / $config["postsPerPage"])) {
                         redirect(makeURL("thread/{$url[1]}/" . ($pages + 1)));
                     }

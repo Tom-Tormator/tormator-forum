@@ -48,7 +48,7 @@ while ($category = $category_query->fetch_assoc()) {
 	</td>
 	<td>");
 	 if ($postCount > 0) {
-        echo("<a href='" . makeURL("user/{$lastPost["user"]}") . "'>{$lastPostUser["username"]}</a>
+        echo("<a href='" . makeURL("user/{$lastPost["user"]}") . "'>" . htmlspecialchars($lastPostUser["username"], ENT_NOQUOTES) . "</a>
         <br>
         <abbr title='" . date("m-d-Y h:i:s A", $lastPost["timestamp"]) . "'>" . relativeTime($lastPost["timestamp"]) . "</abbr>");
      }

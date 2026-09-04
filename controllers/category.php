@@ -29,6 +29,7 @@ $title = $cat["categoryname"];
 // Find out what page we're on.
 if (isset($url[2]) and is_numeric($url[2])) {
     $currentPage = $url[2];
+    if ($currentPage < 1) $currentPage = 1;
 }
 // If no valid page is specified then always assume we're on the first page.
 else {
@@ -41,8 +42,11 @@ $threads = $db->query("SELECT 1 FROM `threads` WHERE `category`='" . $db->real_e
 $numThreads = $threads->num_rows;
 $pages = ceil($numThreads / $config["threadsPerPage"]);
 
+if ($currentPage > $pages) $currentPage = $pages;
+
 // Calculate the offset for the threads query.
 $offset = (($currentPage * $config["threadsPerPage"]) - $config["threadsPerPage"]);
+if ($offset < 0) $offset = 0;
 
 $posts = $db->query("SELECT * FROM `threads` WHERE `category`='" . $db->real_escape_string($url[1]) . "' ORDER BY `lastposttime` LIMIT " . $config["postsPerPage"] . " OFFSET " . $offset . "");
 
