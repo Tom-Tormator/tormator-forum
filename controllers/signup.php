@@ -29,6 +29,20 @@ if (validateToken()) {
     if ($eiv) $errors[] = $eiv;
     $piv = validatePassword($_POST["user_pass"] ?? "", $_POST["user_pass_check"] ?? "");
     if ($piv) $errors[] = $piv;
+    
+    $ipHash = hash("sha256", $_SERVER["REMOTE_ADDR"]);
+    $accounts = $db->query("SELECT `jointime` FROM `users` WHERE `joinip`='{$ipHash}' OR `ip`='{$ipHash}' ORDER BY `jointime` DESC");
+    
+    if ($accounts->num_rows >= $config["accountsPerIP"]) {
+        $errors[] = "You've made too many accounts. Try <a href='" . makeURL("login") . "'>logging in</a> to an existing one instead.";
+    }
+    
+    $jts = $accounts->fetch_assoc();
+    if (($jts !== null) and ($jts !== false)) {
+        if ((time()-(int)$jts["jointime"]) < $config["timeBetweenSignups"]) {
+            $errors[] = "You created another account too recently. Wait a little while and try again.";
+        }
+    }
 
     if (count($errors) != 0) {
         foreach($errors as $error) {

@@ -47,7 +47,10 @@ $default_config = array(
     "maxCats" => 20,
     // Maximum number of characters allowable in a thread or category title.
     "maxCharsPerTitle" => 35,
-    "minPasswordLength" => 12
+    "minPasswordLength" => 12,
+    "accountsPerIP" => 3,
+    // Time (in seconds) that one must wait before creating another account.
+    "timeBetweenSignups" => 60
 );
 
 ?>

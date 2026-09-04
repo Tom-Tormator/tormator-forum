@@ -149,7 +149,9 @@ if (validateToken()) {
             if ($perm_check->num_rows < 1) {
                 message("Post does not exist.", "error");
             }
-            elseif (!isMod() and (($_SESSION["userid"] != $pc["user"]) or ($_SESSION["userid"] != $pc["deletedby"]))) {
+            elseif (!isMod()
+            // If a Mod/Admin hid the post, the user cannot restore it.
+            and (($_SESSION["userid"] != $pc["user"]) or ($_SESSION["userid"] != $pc["deletedby"]))) {
                 message("You don't have permission to do this.", "error");
             }
             else {
