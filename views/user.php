@@ -28,7 +28,13 @@ else {
     echo "<div class='usertop' style='background: #" . $user["color"] . ";'><b>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</b> <small>" . $user["role"] . "</small></div>";
 }
 				
-echo("<div class='userbottom'>Joined: <a title='" . date('m-d-Y h:i:s A', $user['jointime']) . "'>" . relativeTime($user["jointime"]) . "</a>" . "</p>Last active: <a title='" . date('m-d-Y h:i:s A', $user["lastactive"]) . "'>" . relativeTime($user["lastactive"]) . "</a>" . "</p>Posts: " . $posts . "</p>Threads: " . $threads . "</p>Verified: " . $verified . "</div>");
+echo("<div class='userbottom'>
+    <span>Joined: <abbr title='" . date("m-d-Y h:i:s A", $user["jointime"]) . "'>" . relativeTime($user["jointime"]) . "</abbr></span>
+    <span>Last active: <abbr title='" . date("m-d-Y h:i:s A", $user["lastactive"]) . "'>" . relativeTime($user["lastactive"]) . "</abbr></span>
+    <span>Posts: {$posts}</span>
+    <span>Threads: {$threads}</span>
+    <span>Verified: {$verified}</span>
+    </div>");
 
 endif;
 

@@ -330,10 +330,11 @@ tr:nth-child(even) {
  border-top-right-radius: 8px;
 }
 .userbottom {
- border-bottom: 1px solid black;
- border-left: 1px solid black;
- border-right: 1px solid black;
+ border: 1px solid black;
+ border-top: none;
  padding: 8px;
  border-bottom-left-radius: 8px;
  border-bottom-right-radius: 8px;
+ display: grid;
+ gap: 6px;
 }
