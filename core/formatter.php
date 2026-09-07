@@ -32,6 +32,7 @@ function format($string) {
     $string = format_pre($string);
     $string = format_table($string);
     // Non-standard.
+    $string = format_cleft($string);
     $string = format_heading($string);
     $string = format_video($string);
     $string = format_audio($string);
@@ -120,6 +121,17 @@ function format_table($string) {
 }
 
 /*** Non-standard. ***/
+
+function cleave($string) {
+    $string = $string[1];
+    $middle = ceil(strlen($string)/2);
+    $left = substr($string, 0, $middle);
+    $right = substr($string, $middle);
+    return "<div class='lefted'>" . $left . "</div><div class='righted'>" . $right . "</div>";
+}
+function format_cleft($string) {
+    return preg_replace_callback("/\[cleft\](.+?)\[\/cleft\]/s", "cleave", $string);
+}
 
 function format_heading($string) {
     // We pretend h3-h6 are really h1-h4.
