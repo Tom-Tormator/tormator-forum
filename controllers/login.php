@@ -25,19 +25,38 @@ if (validateToken()) {
     
     $password_query = $db->query("SELECT `userid`, `username`, `role`, `password` FROM `users` WHERE `username`='" . $db->real_escape_string($_POST["user_name"]) . "'");
     $user_info = $password_query->fetch_assoc();
+    
+    $iphash = hash("sha256", $_SERVER["REMOTE_ADDR"]);
+    
+    $errors = array();
 		
     if (strlen($_POST["user_name"]) < 1) {
-        message("Your username cannot be blank.", "error");
-    }
-    elseif (!$password_query->num_rows) {
-        message("The specified user doesn't exist.", "error");
+        $errors[] = "Your username cannot be blank.";
     }
     elseif (strlen($_POST["user_pass"]) < 1) {
-        message("Your password cannot be blank.", "error");
+        $errors[] = "Your password cannot be blank.";
     }
-    // Now check if the password is correct.
-    elseif (!password_verify($_POST["user_pass"] ?? "", $user_info["password"])) {
-        message("Incorrect password.", "error");
+    elseif (!$password_query->num_rows) {
+        $errors[] = "The specified user doesn't exist.";
+    }
+    else {
+        // Rate limit check.
+        $rlcheck = $db->query("SELECT 1 FROM `logs` WHERE `action`='login_fail' AND `ip`='{$iphash}' AND `victim`='{$user_info["userid"]}' AND `timestamp`>" . (time()-3600));
+        if ($rlcheck->num_rows >= $config["loginsPerHour"]) {
+            $errors[] = "Too many failed login attemps. Try again later.";
+        }
+        // Now check if the password is correct.
+        elseif (!password_verify($_POST["user_pass"] ?? "", $user_info["password"])) {
+            $errors[] = "Incorrect password.";
+            // Log failed login.
+            $db->query("INSERT INTO `logs` (`action`, `victim`, `ip`, `useragent`, `timestamp`) VALUES ('login_fail', '{$user_info["userid"]}', '{$iphash}', '" . $db->real_escape_string(substr($_SERVER["HTTP_USER_AGENT"], 0, 255)) . "', '" . time() . "')");
+        }
+    }
+    
+    if (count($errors)) {
+        foreach ($errors as $error) {
+            message($error, "error");
+        }
     }
     else {
         session_regenerate_id(true);
@@ -46,7 +65,10 @@ if (validateToken()) {
         $_SESSION["username"] = $user_info["username"];
         $_SESSION["role"] = $user_info["role"];
         
-        $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='" . hash("sha256", $_SERVER["REMOTE_ADDR"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
+        $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='{$iphash}' WHERE `userid`='" . $_SESSION["userid"] . "'");
+        
+        // Log successful login.
+        $db->query("INSERT INTO `logs` (`action`, `victim`, `ip`, `useragent`, `timestamp`) VALUES ('login_success', '{$_SESSION["userid"]}', '{$iphash}', '" . $db->real_escape_string(substr($_SERVER["HTTP_USER_AGENT"], 0, 255)) . "', '" . time() . "')");
 
         // Just redirect the user to the forum homepage.
         redirect("");

@@ -45,15 +45,17 @@ $default_config = array(
     // Maximum number of characters allowable in a single post.
     "maxCharsPerPost" => 50000,
     // Number of seconds between posts during which a user can't make another post.
-    "postDelay" => 5,
+    "postDelay" => 30,
     // Maximum number of categories that can be created.
-    "maxCats" => 20,
+    "maxCats" => 32,
     // Maximum number of characters allowable in a thread or category title.
-    "maxCharsPerTitle" => 35,
+    "maxCharsPerTitle" => 32,
     "minPasswordLength" => 12,
     "accountsPerIP" => 3,
     // Time (in seconds) that one must wait before creating another account.
-    "timeBetweenSignups" => 60
+    "timeBetweenSignups" => 300,
+    // Max login attempts per IP per hour.
+    "loginsPerHour" => 3
 );
 
 ?>
