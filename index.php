@@ -26,6 +26,7 @@ $config = array_merge($default_config, $config);
 if ($config["installed"]) $db = mysqli_connect($config["MySQLServer"], $config["MySQLUser"],  $config["MySQLPass"], $config["MySQLDatabase"]);
 
 require "core/functions.php";
+require "core/formatter.php";
 
 // If a session doesn't exist, set one.
 if (!session_id()) {

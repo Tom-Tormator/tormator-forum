@@ -114,7 +114,7 @@ while ($row = $posts_query->fetch_assoc()) {
 		}
 		
 		else {
-			echo '</div><div class="postcontent">' . htmlspecialchars($row["content"]) . '</div>';
+			echo '</div><div class="postcontent">' . format($row["content"]) . '</div>';
 		}
 	}
 	echo("</div>");
