@@ -176,8 +176,7 @@ if (!$config["installed"]) {
         <input type='text' name='SQLUser' id='SQLUser' value='"
         . htmlspecialchars($_POST["SQLUser"] ?? "") . "'>
         <label for='SQLPass'>SQL Password:</label>
-        <input type='password' name='SQLPass' id='SQLPass' value='"
-        . htmlspecialchars($_POST["SQLPass"] ?? "") . "'>
+        <input type='password' name='SQLPass' id='SQLPass'>
         <label for='SQLDB'>SQL Database:</label>
         <input type='text' name='SQLDB' id='SQLDB' value='"
         . htmlspecialchars($_POST["SQLDB"] ?? "") . "'>
@@ -189,11 +188,9 @@ if (!$config["installed"]) {
         <input type='email' name='email' id='email' value='"
         . htmlspecialchars($_POST["email"] ?? "") . "'>
         <label for='password'>Password:</label>
-        <input type='password' name='password' id='password' value='"
-        . htmlspecialchars($_POST["password"] ?? "") . "'>
+        <input type='password' name='password' id='password'>
         <label for='confirmpassword'>Confirm password:</label>
-        <input type='password' name='confirmpassword' id='confirmpassword' value='"
-        . htmlspecialchars($_POST["confirmpassword"] ?? "") . "'>
+        <input type='password' name='confirmpassword' id='confirmpassword'>
         <br><h3>Advanced</h3>
         <label for='overwrite'>Overwrite old database:</label>
         <input type='checkbox' name='overwrite' id='overwrite'"

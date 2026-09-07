@@ -30,7 +30,8 @@ if (validateToken()) {
             $errors[] = "New username cannot be the same as old username.";
         }
         else {
-            $errors[] = validateUsername($_POST["newusername"] ?? "");
+            $vu = validateUsername($_POST["newusername"] ?? "");
+            if ($vu != "") $errors[] = $vu;
         }
 
         if (!password_verify($_POST["confirmpass"] ?? "", $p["password"])) {

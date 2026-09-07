@@ -29,8 +29,13 @@ if (validateToken()) {
     $iphash = hash("sha256", $_SERVER["REMOTE_ADDR"]);
     
     $errors = array();
-		
-    if (strlen($_POST["user_name"]) < 1) {
+    
+    // Rate limit check.
+    $rlcheck = $db->query("SELECT 1 FROM `logs` WHERE `action`='login_fail' AND `ip`='{$iphash}' AND `timestamp`>" . (time()-3600));
+    if ($rlcheck->num_rows >= $config["loginsPerHour"]) {
+        $errors[] = "Too many failed login attemps. Try again later.";
+    }
+    elseif (strlen($_POST["user_name"]) < 1) {
         $errors[] = "Your username cannot be blank.";
     }
     elseif (strlen($_POST["user_pass"]) < 1) {
@@ -39,18 +44,11 @@ if (validateToken()) {
     elseif (!$password_query->num_rows) {
         $errors[] = "The specified user doesn't exist.";
     }
-    else {
-        // Rate limit check.
-        $rlcheck = $db->query("SELECT 1 FROM `logs` WHERE `action`='login_fail' AND `ip`='{$iphash}' AND `victim`='{$user_info["userid"]}' AND `timestamp`>" . (time()-3600));
-        if ($rlcheck->num_rows >= $config["loginsPerHour"]) {
-            $errors[] = "Too many failed login attemps. Try again later.";
-        }
-        // Now check if the password is correct.
-        elseif (!password_verify($_POST["user_pass"] ?? "", $user_info["password"])) {
-            $errors[] = "Incorrect password.";
-            // Log failed login.
-            $db->query("INSERT INTO `logs` (`action`, `victim`, `ip`, `useragent`, `timestamp`) VALUES ('login_fail', '{$user_info["userid"]}', '{$iphash}', '" . $db->real_escape_string(substr($_SERVER["HTTP_USER_AGENT"], 0, 255)) . "', '" . time() . "')");
-        }
+    // Now check if the password is correct.
+    elseif (!password_verify($_POST["user_pass"] ?? "", $user_info["password"])) {
+        $errors[] = "Incorrect password.";
+        // Log failed login.
+        $db->query("INSERT INTO `logs` (`action`, `victim`, `ip`, `useragent`, `timestamp`) VALUES ('login_fail', '{$user_info["userid"]}', '{$iphash}', '" . $db->real_escape_string(substr($_SERVER["HTTP_USER_AGENT"], 0, 255)) . "', '" . time() . "')");
     }
     
     if (count($errors)) {

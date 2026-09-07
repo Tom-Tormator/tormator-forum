@@ -23,9 +23,9 @@ if (!$_SESSION["signed_in"] and !$success):
  <label for='user_email'>Email:</label>
  <input type='email' name='user_email' id='user_email' value='<?php echo(htmlspecialchars($_POST["user_email"] ?? "")); ?>'>
  <label for='user_pass'>Password:</label>
- <input type='password' name='user_pass' id='user_pass' value='<?php echo(htmlspecialchars($_POST["user_pass"] ?? "")); ?>'>
+ <input type='password' name='user_pass' id='user_pass'>
  <label for='user_pass_check'>Confirm password:</label>
- <input type='password' name='user_pass_check' id='user_pass_check' value='<?php echo(htmlspecialchars($_POST["user_pass_check"] ?? "")); ?>'>
+ <input type='password' name='user_pass_check' id='user_pass_check'>
  <br>
  <input type='submit' class='item' value='Sign up'>
 </form>
