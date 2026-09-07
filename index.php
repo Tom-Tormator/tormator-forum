@@ -23,17 +23,26 @@ if (file_exists("config/config.php")) require "config/config.php";
 else $config = array();
 $config = array_merge($default_config, $config);
 
+if (!$config["allowiframe"]) {
+    header("Content-Security-Policy: frame-ancestors 'none';");
+    header("X-Frame-Options: DENY");
+}
+
 if ($config["installed"]) $db = mysqli_connect($config["MySQLServer"], $config["MySQLUser"],  $config["MySQLPass"], $config["MySQLDatabase"]);
 
 require "core/functions.php";
 require "core/formatter.php";
+
+$https = (($_SERVER["HTTPS"] ?? "") == "on");
 
 // If a session doesn't exist, set one.
 if (!session_id()) {
     session_name($config["cookiePrefix"] . "Session");
     session_set_cookie_params([
     "httponly" => true,
-    "samesite" => "Strict"]);
+    "samesite" => "Strict",
+    "secure" => ($https ? true : false),
+    "path" => ("/" . $config["folder"])]);
     session_start();
 }
 

@@ -38,6 +38,8 @@ $default_config = array(
     "forumDescription" => "Lightweight, easy-to-use, free forum software.",
     // The text that appears on the footer.
     "footer" => "Powered by Tormator Forum",
+    // Whether the site is allowed to be embedded in an <iframe>. Strongly recommended that you do not allow this for security reasons (clickjacking).
+    "allowiframe" => false,
     // Number of posts to display on a page in a thread.
     "postsPerPage" => 10,
     // Number of threads to display on a page in a category.
