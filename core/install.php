@@ -17,6 +17,17 @@ if (!is_writable("config/")) {
     message("Config directory isn't writable.");
 }
 
+// Figure out if we are installing to a subdirectory.
+$querystart = strpos($_SERVER["REQUEST_URI"], "?");
+if ($querystart === false) $querystart = null;
+$dirtest = explode("/", substr($_SERVER["REQUEST_URI"], 0, $querystart));
+$lasti = count($dirtest)-1;
+if (str_starts_with($dirtest[$lasti], "index.php")) array_pop($dirtest);
+$dir = trim(implode("/", $dirtest), "/");
+
+// Also figure out the baseURL. Technically HTTP_HOST comes from the HTTP Host header, but the main admin is the one installing and can review for accuracy during and after installation.
+$tempBaseURL = ((($_SERVER["HTTPS"] ?? "") == "on") ? "https://" : "http://") . $_SERVER["HTTP_HOST"] . ($dir ? "/{$dir}" : "");
+
 if (validateToken()) {
     $errors = array();
     
@@ -51,6 +62,7 @@ if (validateToken()) {
             $db->query("DROP TABLE IF EXISTS `posts`");
             $db->query("DROP TABLE IF EXISTS `threads`");
             $db->query("DROP TABLE IF EXISTS `users`");
+            $db->query("DROP TABLE IF EXISTS `logs`");
         }
         
         $db->query("CREATE TABLE IF NOT EXISTS `categories` (
@@ -106,6 +118,16 @@ if (validateToken()) {
             UNIQUE KEY `user_email` (`email`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         
+        $db->query("CREATE TABLE IF NOT EXISTS `logs` (
+            `action` varchar(64) NOT NULL,
+            `subject` int unsigned NOT NULL DEFAULT '0',
+            `victim` int unsigned DEFAULT NULL,
+            `data` varchar(4096) DEFAULT NULL,
+            `ip` char(64) NOT NULL,
+            `useragent` varchar(255) NOT NULL,
+            `timestamp` bigint NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        
         // Make a default category.
         $db->query("REPLACE INTO `categories` (`categoryname`, `categorydescription`) VALUES ('General', 'Discuss general topics here.')");
         
@@ -117,20 +139,13 @@ if (validateToken()) {
         $db->query("REPLACE INTO `users` (`username`, `email`, `password`, `role`, `jointime`, `lastactive`, `joinip`, `ip`, `verified`) VALUES ('" . $db->real_escape_string($_POST["username"]) . "', '" . $db->real_escape_string($_POST["email"]) . "', '" . $db->real_escape_string($password) ."', 'Administrator', '{$now}', '{$now}', '{$ip}', '{$ip}' ,'1')");
         $config["mainAdmin"] = $db->insert_id;
         
-        // Figure out if we are installing to a subdirectory.
-        $querystart = strpos($_SERVER["REQUEST_URI"], "?");
-        if ($querystart === false) $querystart = null;
-        $dirtest = explode("/", substr($_SERVER["REQUEST_URI"], 0, $querystart));
-        $lasti = count($dirtest)-1;
-        if (str_starts_with($dirtest[$lasti], "index.php")) array_pop($dirtest);
-        $dir = trim(implode("/", $dirtest), "/");
-        $config["folder"] = $dir;
-        
         if (function_exists("apache_get_modules") and in_array("mod_rewrite", apache_get_modules())) {
             $config["modRewrite"] = true;
         }
 
         message("Database successfully written.");
+        $config["folder"] = $dir;
+        $config["baseURL"] = rtrim(($_POST["baseURL"] ?? $tempBaseURL), "/");
         $config["installed"] = true;
         $config["MySQLServer"] = $_POST["SQLHost"];
         $config["MySQLUser"] = $_POST["SQLUser"];
@@ -183,6 +198,10 @@ if (!$config["installed"]) {
         <label for='overwrite'>Overwrite old database:</label>
         <input type='checkbox' name='overwrite' id='overwrite'"
         . (($_POST["overwrite"] ?? "") == "on" ? " checked" : "") . ">
+        <label for='baseURL'>Base URL:</label>
+        <input type='text' name='baseURL' id='baseURL' value='"
+        . htmlspecialchars($_POST["baseURL"] ?? $tempBaseURL) . "'>
+        <br><small>This has security implications, make sure this URL is correct!</small>
         <br>
         <input type='submit' class='item' value='Install'>
     </form>");

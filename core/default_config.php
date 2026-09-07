@@ -24,6 +24,8 @@ $default_config = array(
     "MySQLDatabase" => "",
     // The folder the forum is installed in if applicable.
     "folder" => "",
+    // Used in certain places, should be the canonical URL of your forum.
+    "baseURL" => "",
     // Whether or not mod_rewrite is enabled.
     "modRewrite" => false,
     // Userid of the main admin, their role cannot be changed by other admins.
