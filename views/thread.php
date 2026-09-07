@@ -77,8 +77,9 @@ while ($row = $posts_query->fetch_assoc()) {
         echo("</div>");
 	}
 	else {
-		echo("<div style='background-color: #" . $u["color"] . ";' class='postheader'>");
-		echo("<a href='" . makeURL("user/{$u["userid"]}") . "'>" . htmlspecialchars($u["username"]) . "</a>&nbsp;
+	    $textcolor = contrastText($u["color"]);
+		echo("<div style='background-color: #{$u["color"]}; color: #{$textcolor};!important' class='postheader'>");
+		echo("<a style='color: #{$textcolor};' href='" . makeURL("user/{$u["userid"]}") . "'>" . htmlspecialchars($u["username"]) . "</a>&nbsp;
 		<abbr title='" . date('m-d-Y h:i:s A', $row["timestamp"]) . "'>" . relativeTime($row["timestamp"]) . "</abbr>");
 		if ($_SESSION["signed_in"]
 		and (isMod() or ($u["userid"] == $_SESSION["userid"]))) {

@@ -83,10 +83,10 @@ if (validateToken()) {
                 else {
                     $update = $db->query("UPDATE `threads` SET `lastpostuser`='" . $_SESSION["userid"] . "', `lastposttime`='" . time() . "' WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
                     if ($pages < ceil(($numPosts+1) / $config["postsPerPage"])) {
-                        redirect(makeURL("thread/{$url[1]}/" . ($pages + 1)));
+                        redirect("thread/{$url[1]}/" . ($pages + 1));
                     }
                     else {
-                        redirect(makeURL("thread/{$url[1]}/" . $pages));
+                        redirect("thread/{$url[1]}/" . $pages);
                     }
                 }
             }

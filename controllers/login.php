@@ -48,7 +48,8 @@ if (validateToken()) {
         
         $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='" . hash("sha256", $_SERVER["REMOTE_ADDR"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
 
-        message("Welcome, " . htmlspecialchars($_SESSION["username"], ENT_NOQUOTES) . ". <a href='" . makeURL("") . "'>Proceed to the forum overview</a>.", "success");
+        // Just redirect the user to the forum homepage.
+        redirect("");
     }
 }
 

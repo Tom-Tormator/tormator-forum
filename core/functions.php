@@ -32,11 +32,9 @@ function makeURL($page, $file=false) {
 // Redirects the user to the specified page. If blank it defaults to the homepage.
 function redirect($text) {
     global $config;
-    if (($_SERVER["HTTPS"] ?? "") == "on") $proto = "https://";
-    else $proto = "http://";
     if ($config["folder"]) $folder = $config["folder"] . "/";
     else $folder = "";
-	header("Location: " . $proto . $_SERVER["HTTP_HOST"] . "/" . $folder . $text);
+	header("Location: /" . $folder . $text);
 	exit();
 }
 
@@ -295,6 +293,15 @@ function canChangeRole($subjectRole, $victimRole, $to) {
         }
     }
     else return false;
+}
+
+function contrastText($color) {
+    $r = hexdec(substr($color, 0, 2));
+    $g = hexdec(substr($color, 2, 2));
+    $b = hexdec(substr($color, 4, 2));
+    $brightness = sqrt(($r*$r*0.299) + ($g*$g*0.587) + ($b*$b*0.114));
+    if ($brightness >= 127) return "000000";
+    else return "ffffff";
 }
 
 /* PHP 7.X compatibility. */

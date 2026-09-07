@@ -22,7 +22,8 @@ require "views/header.php";
  </tr>
 <?php
 while ($category = $category_query->fetch_assoc()) {
-	$numthreads = $db->query("SELECT 1 FROM `threads` WHERE `category`='" . $category["categoryid"] . "'");
+	$numthreads = $db->query("SELECT count(*) FROM `threads` WHERE `category`='" . $category["categoryid"] . "'");
+	$threadCount = $numthreads->fetch_assoc()["count(*)"];
 	// Cleft join to count posts in each category.
 	$numPosts = $db->query("SELECT count(*) FROM `threads` LEFT JOIN `posts` ON `posts`.`thread`=`threads`.`threadid` WHERE `threads`.`category`='" . $category["categoryid"] . "'");
 	$postCount = $numPosts->fetch_assoc()["count(*)"];
@@ -41,7 +42,7 @@ while ($category = $category_query->fetch_assoc()) {
 	. htmlspecialchars($category["categorydescription"], ENT_NOQUOTES) . "
 	</td>
 	<td class='centered'>
-	 {$numthreads->num_rows}
+	 {$threadCount}
 	</td>
 	<td class='centered'>
 	 {$postCount}

@@ -13,6 +13,7 @@ if (!defined("INDEXED")) exit;
 
 $default_config = array(
     "installed" => false,
+    "version" => "0.0.0-noir",
     // URL for your MySQL server. Set to localhost if it's on the same machine.
     "MySQLServer" => "",
     // Username for native MySQL user.

@@ -14,7 +14,8 @@ if (!defined("INDEXED")) exit;
 require "views/header.php";
 			
 if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] != $_SESSION["userid"]) and canChangeRole($_SESSION["role"], $user["role"], "Suspended")) {
-    echo "<div class='usertop' style='background: #" . htmlspecialchars($user["color"]) . ";'>
+    $textcolor = contrastText($user["color"]);
+    echo "<div class='usertop' style='background: #" . $user["color"] . "; color: #" . $textcolor . ";'>
     <b>" . htmlspecialchars($user["username"]) . "</b> <small>
     <form method='post'>
     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
@@ -35,7 +36,8 @@ if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] !
     echo "</select><input type='submit' value='Change role'></form></small></div>";
 }
 else {
-    echo "<div class='usertop' style='background: #" . $user["color"] . ";'><b>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</b> <small>" . $user["role"] . "</small></div>";
+    $textcolor = contrastText($user["color"]);
+    echo "<div class='usertop' style='background: #" . $user["color"] . "; color: #" . $textcolor . ";'><b>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</b> <small>" . $user["role"] . "</small></div>";
 }
 				
 echo("<div class='userbottom'>

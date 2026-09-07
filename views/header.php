@@ -32,12 +32,14 @@ if (!defined("INDEXED")) exit;
   <a class="item" href="<?php echo(makeURL("newthread")); ?>">Create a thread</a>
  <?php endif;
 		if ($_SESSION["role"] == "Administrator") {
-			echo("<a class='item' href='" . makeURL("newcategory") . "'>Create a category</a>
-			<a class='item' href='" . makeURL("panel") . "'>Admin Panel</a>");
+			echo("<a class='item' href='" . makeURL("panel") . "'>Admin panel</a>");
 		}
 
 		if ($_SESSION["signed_in"]) {
-			echo("<a class='item' href='" . makeURL("logout") . "'>Log out</a>");
+			echo("<form method='post'>
+			<input type='hidden' name='token' value='{$_SESSION["token"]}'>
+			<input type='submit' class='item' name='logout' value='Log out'>
+			</form>");
 		}
 
 		echo("<div id='userbar'>");

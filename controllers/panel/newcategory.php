@@ -57,8 +57,6 @@ if (validateToken()) {
     }
 }
 
-require "views/newcategory.php";
-
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {
 	update_last_action("Creating a category");

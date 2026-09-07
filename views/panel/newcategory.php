@@ -11,8 +11,6 @@
 // Only load the page if it's being loaded through the index.php file.
 if (!defined("INDEXED")) exit;
 
-require "views/header.php";
-
 if (!$success):
 ?>
 
@@ -27,4 +25,4 @@ if (!$success):
  <input type='submit' class='item' value='Add category'>
 </form>
 
-<?php endif; require "views/footer.php"; ?>
+<?php endif; ?>

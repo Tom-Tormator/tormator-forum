@@ -64,8 +64,15 @@ if (validateToken()) {
             message("Something went wrong while signing up. Please try again later.", "error");
         }
         else {
-            message("Successfully signed up. You can now <a href='" . makeURL("login") . "'>log in</a> and start posting! :-)", "success");
-            $success = true;
+            // Log the new user in.
+            session_regenerate_id(true);
+            $_SESSION["signed_in"] = true;
+            $_SESSION["userid"] = $db->insert_id;
+            $_SESSION["username"] = $_POST["user_name"];
+            $_SESSION["role"] = $role;
+            
+            // Finally send them to their settings page.
+            redirect("settings");
         }
     }
 }

@@ -10,6 +10,7 @@
 
 // Define a constant to ensure pages are only loaded through this index file.
 define("INDEXED", "1");
+define("VERSION", "0.0.0-noir");
 
 // Disable the output buffer to avoid screen tears.
 ob_end_clean();
@@ -66,11 +67,12 @@ $pages = array("signup", "login", "newcategory", "newthread", "category", "threa
 
 $title = "";
 
+if (isset($_POST["logout"]) and validateToken()) logout();
+
 // Based on the URL, serve the user with a corresponding page.
 if (!$config["installed"]) require "core/install.php";
 elseif (!$url[0]) require "controllers/homepage.php";
 elseif (in_array($url[0], $pages)) require "controllers/{$url[0]}.php";
-elseif ($url[0] == "logout") logout();
 else {
     http_response_code(404);
     $title = "Not found";

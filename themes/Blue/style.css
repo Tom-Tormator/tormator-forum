@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 /* Blue theme */
-/* Main styles. */
+/* Globals. */
 :root {
  --border-color: #444;
 }
@@ -127,13 +127,16 @@ tr:nth-child(even) {
 }
 #messages {
  display: grid;
+ gap: 4px;
 }
 .message {
  border: 1px solid black;
  border-radius: 4px;
  background: grey;
  padding: 5px;
- margin-bottom: 4px;
+}
+.message:last-child {
+ margin-bottom: 10px;
 }
 .message a {
  text-decoration: none;
@@ -156,7 +159,7 @@ tr:nth-child(even) {
  border-color: darkgreen;
 }
 
-/* Pagination styles. */
+/* Pagination */
 .pagination {
  background: lightgray;
  border: 1px solid black;
@@ -194,7 +197,7 @@ tr:nth-child(even) {
  text-decoration: none;
 }
 
-/* Menu styles. */
+/* Menu */
 .item {
  background: linear-gradient(#166ad7, #111A95);
  border: 1px solid #032472;
@@ -237,7 +240,7 @@ tr:nth-child(even) {
  padding: 30px;
 }
 
-/* Thread styles. */
+/* Thread */
 .posts {
  display: grid;
  gap: 6px;
@@ -324,7 +327,7 @@ tr:nth-child(even) {
  gap: 1px;
 }
 
-/* Userlist Styles. */
+/* Userlist */
 .userlist {
  display: grid;
  gap: 4px;
@@ -344,7 +347,7 @@ tr:nth-child(even) {
  text-decoration: underline;
 }
 
-/* User Styles. */
+/* Profiles */
 .usertop {
  border: 1px solid black;
  padding: 8px;
@@ -359,4 +362,30 @@ tr:nth-child(even) {
  border-bottom-right-radius: 8px;
  display: grid;
  gap: 6px;
+}
+
+/* Panel */
+.paneltabs {
+}
+.paneltab {
+ background: #eed3a1;
+ padding: 6px 12px;
+ border-top-left-radius: 12px;
+ border-top-right-radius: 12px;
+ border: 1px solid #aa8849;
+ color: black;
+ text-decoration: none;
+}
+.paneltab:hover {
+ text-decoration: underline;
+}
+.paneltabactive {
+ border-bottom: 1px solid wheat;
+ background: wheat;
+}
+.panelcontent {
+ background: wheat;
+ padding: 12px;
+ border: 1px solid #aa8849;
+ margin-top: 6px;
 }

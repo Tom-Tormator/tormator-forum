@@ -20,8 +20,9 @@ require "views/header.php";
 <div class='userlist'>
 <?php
 while ($user = $users_query->fetch_assoc()) {
-    echo("<div class='userlistitem' style='background:#" . $user["color"] . ";'>
-    <a href='" . makeURL("user/{$user["userid"]}") . "'>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</a>&nbsp; " . $user["role"] . "&nbsp; <small>" . $user["lastaction"] . " (<abbr title='" . date("m-d-Y h:i:s A", $user["lastactive"]) . "'>" . relativeTime($user["lastactive"]) . "</abbr>)</small>
+    $textcolor = contrastText($user["color"]);
+    echo("<div class='userlistitem' style='background:#" . $user["color"] . "; color: #{$textcolor};!important'>
+    <a style='color: #{$textcolor};' href='" . makeURL("user/{$user["userid"]}") . "'>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "</a>&nbsp; " . $user["role"] . "&nbsp; <small>" . $user["lastaction"] . " (<abbr title='" . date("m-d-Y h:i:s A", $user["lastactive"]) . "'>" . relativeTime($user["lastactive"]) . "</abbr>)</small>
     </div>");
 }
 ?>

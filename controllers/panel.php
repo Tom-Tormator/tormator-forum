@@ -15,9 +15,31 @@ $title = "Admin panel";
 
 if ($_SESSION["role"] != "Administrator") {
     message("Sorry, this page is unavailable to non-admins.");
+    require "views/error.php";
+    exit();
 }
-else {
-    message("This page is a work in progress.");
+
+function active($tab) {
+    global $page;
+    if ($tab == $page) return " paneltabactive";
+    else return "";
+}
+
+$panelpages = array("newcategory");
+$page = "main";
+
+if (isset($url[1])) {
+    if (in_array($url[1], $panelpages)) {
+        $page = $url[1];
+        require "controllers/panel/{$url[1]}.php";
+    }
+    else {
+        $title = "Not found";
+        http_response_code(404);
+        message("Panel page not found.");
+        require "views/error.php";
+        exit();
+    }
 }
 
 require "views/panel.php";

@@ -12,6 +12,14 @@
 if (!defined("INDEXED")) exit;
 
 require "views/header.php";
-require "views/footer.php";
 
-?>
+?><div class='paneltabs'>
+ <a class='paneltab<?php echo(active("main")); ?>' href='<?php echo(makeURL("panel")); ?>'>Panel</a>
+ <a class='paneltab<?php echo(active("newcategory")); ?>' href='<?php echo(makeURL("panel/newcategory")); ?>'>New category</a>
+</div>
+
+<div class='panelcontent'>
+<?php require "views/panel/{$page}.php"; ?>
+</div>
+
+<?php require "views/footer.php"; ?>
