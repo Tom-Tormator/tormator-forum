@@ -28,7 +28,10 @@ if (!$config["allowiframe"]) {
     header("X-Frame-Options: DENY");
 }
 
-if ($config["installed"]) $db = mysqli_connect($config["MySQLServer"], $config["MySQLUser"],  $config["MySQLPass"], $config["MySQLDatabase"]);
+if ($config["installed"]) {
+    $db = mysqli_connect($config["MySQLServer"], $config["MySQLUser"],  $config["MySQLPass"], $config["MySQLDatabase"]);
+    $db->set_charset("utf8mb4");
+}
 
 require "core/functions.php";
 require "core/formatter.php";

@@ -81,7 +81,6 @@ if (validateToken()) {
                     message("Your reply has not been saved, please try again later.", "error");
                 }
                 else {
-                    $update = $db->query("UPDATE `threads` SET `lastpostuser`='" . $_SESSION["userid"] . "', `lastposttime`='" . time() . "' WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
                     if ($pages < ceil(($numPosts+1) / $config["postsPerPage"])) {
                         redirect("thread/{$url[1]}/" . ($pages + 1));
                     }
@@ -93,7 +92,7 @@ if (validateToken()) {
         }
         // If the user is requesting to delete a post...
         elseif (isset($_POST["delete"])) {
-            $perm_check = $db->query("SELECT `user` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["delete"]) . "'");
+            $perm_check = $db->query("SELECT `user` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["delete"]) . "' AND `thread`='" . $db->real_escape_string($url[1]) . "'");
             if ($perm_check->num_rows < 1) {
                 message("Post does not exist.", "error");
             }
@@ -107,16 +106,13 @@ if (validateToken()) {
                     message("Sorry, post couldn't be deleted.", "error");
                 }
                 else {
-                    // Now we need to update the thread's data to be in sync with the remaining posts.
-                    $lastpost = $db->query("SELECT * FROM `posts` WHERE `thread`='" . $db->real_escape_string($url[1]) . "' ORDER BY `timestamp` DESC LIMIT 1");
+                    $lastpost = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $db->real_escape_string($url[1]) . "'");
                     // If there are no more posts, delete the thread.
                     if ($lastpost->num_rows < 1) {
                         $result = $db->query("DELETE FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
                         redirect(makeURL("category/" . $thread["category"]));
                     }
                     else {
-                        $lp = $lastpost->fetch_assoc();
-                        $update = $db->query("UPDATE `threads` SET `lastpostuser`='" . $lp["user"] . "', `lastposttime`='" . $lp["timestamp"] . "' WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
                         refresh(0);
                     }
                 }

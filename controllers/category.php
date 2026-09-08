@@ -48,9 +48,19 @@ if ($currentPage > $pages) $currentPage = $pages;
 $offset = (($currentPage * $config["threadsPerPage"]) - $config["threadsPerPage"]);
 if ($offset < 0) $offset = 0;
 
-$posts = $db->query("SELECT * FROM `threads` WHERE `category`='" . $db->real_escape_string($url[1]) . "' ORDER BY `lastposttime` LIMIT " . $config["postsPerPage"] . " OFFSET " . $offset . "");
-
-$threads = $db->query("SELECT * FROM threads WHERE category='" . $db->real_escape_string($url[1]) . "' ORDER BY sticky DESC, lastposttime DESC LIMIT " . $config["threadsPerPage"] . " OFFSET " . $offset . "");
+$threads = $db->query("SELECT `threads`.*, p.`user`,p.`timestamp`,u.`username`
+FROM `threads`
+LEFT JOIN `posts` AS p ON p.`thread`=`threads`.`threadid`
+LEFT JOIN `users` AS u ON u.`userid`=p.`user`
+WHERE `category`='" . $db->real_escape_string($url[1]) . "' AND p.`timestamp`=(
+ SELECT MAX(`timestamp`)
+ FROM `posts`
+ WHERE `thread`=`threads`.`threadid`
+)
+GROUP BY `threads`.`threadid`
+ORDER BY `threads`.`sticky` DESC, p.`timestamp` DESC
+LIMIT " . $config["postsPerPage"] . "
+OFFSET " . $offset . "");
 
 if ($threads->num_rows < 1) {
     message("There are no threads in this category yet.");

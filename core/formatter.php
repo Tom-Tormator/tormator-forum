@@ -127,7 +127,7 @@ function cleave($string) {
     $middle = ceil(strlen($string)/2);
     $left = substr($string, 0, $middle);
     $right = substr($string, $middle);
-    return "<div class='lefted'>" . $left . "</div><div class='righted'>" . $right . "</div>";
+    return "<div class='cleft'><div class='lefted'>" . $left . "</div><div class='righted'>" . $right . "</div></div>";
 }
 function format_cleft($string) {
     return preg_replace_callback("/\[cleft\](.+?)\[\/cleft\]/s", "cleave", $string);

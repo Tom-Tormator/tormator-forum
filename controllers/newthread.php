@@ -51,7 +51,7 @@ if (validateToken()) {
         $justnow = time();
         $userid = $_SESSION["userid"];
 		
-        $threadresult = $db->query("INSERT INTO `threads` (`title`, `startuser`, `starttime`, `lastpostuser`, `lastposttime`, `category`) VALUES ('" . $db->real_escape_string($_POST["title"]) . "', '$userid', '$justnow', '$userid', '$justnow', '" . $db->real_escape_string($_POST["category"]) . "')");
+        $threadresult = $db->query("INSERT INTO `threads` (`title`, `startuser`, `starttime`, `category`) VALUES ('" . $db->real_escape_string($_POST["title"]) . "', '$userid', '$justnow', '" . $db->real_escape_string($_POST["category"]) . "')");
 			
         if (!$threadresult) {
             message("An error occured while inserting your thread. Please try again later.", "error");

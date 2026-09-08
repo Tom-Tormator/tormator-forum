@@ -53,13 +53,10 @@ while ($row = $threads->fetch_assoc()) {
     echo("<br><abbr title='" . date('m-d-Y h:i:s A', $row['starttime']) . "'>" . relativeTime($row["starttime"]) . "</abbr>");
 				
     echo("</td><td>");
-				
-    $uinfo_query = $db->query("SELECT `username` FROM `users` WHERE `userid`='" . $row["lastpostuser"] . "'");		
-    $uinfo = $uinfo_query->fetch_assoc();
     
-    echo("<a href='" . makeURL("user/{$row["lastpostuser"]}") . "'>" . htmlspecialchars($uinfo["username"], ENT_NOQUOTES) . "</a>");
+    echo("<a href='" . makeURL("user/{$row["user"]}") . "'>" . htmlspecialchars($row["username"], ENT_NOQUOTES) . "</a>");
 				
-    echo '<br><abbr title="' . date('m-d-Y h:i:s A', $row['lastposttime']) . '">' . relativeTime($row["lastposttime"]) . '</abbr></td></tr>';
+    echo '<br><abbr title="' . date('m-d-Y h:i:s A', $row['timestamp']) . '">' . relativeTime($row["timestamp"]) . '</abbr></td></tr>';
 }	
 echo "</table>";
 

@@ -300,6 +300,10 @@ tr:nth-child(even) {
  padding: 2px 4px;
  background: #eaeaea;
 }
+.postcontent h3, .postcontent h4, .postcontent h5, .postcontent h6 {
+ margin: 0;
+ display: inline-block;
+}
 .hiddenpost {
  background: #ccc;
  border-radius: inherit;
@@ -359,6 +363,13 @@ tr:nth-child(even) {
 }
 .righted {
  text-align: right;
+}
+.cleft {
+ display: flex;
+ width: 100%;
+}
+.cleft .lefted, .cleft .righted {
+ flex: 50%;
 }
 
 /* Userlist */

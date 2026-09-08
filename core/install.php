@@ -46,6 +46,7 @@ if (validateToken()) {
     
     try {
         $db = mysqli_connect($_POST["SQLHost"], $_POST["SQLUser"],  $_POST["SQLPass"], $_POST["SQLDB"]);
+        $db->set_charset("utf8mb4");
     }
     catch (Exception $e) {
         $errors[] = "Database error: " . $e->getMessage();
@@ -58,10 +59,10 @@ if (validateToken()) {
     }
     else {
         if (($_POST["overwrite"] ?? "") == "on") {
-            $db->query("DROP TABLE IF EXISTS `categories`");
             $db->query("DROP TABLE IF EXISTS `posts`");
             $db->query("DROP TABLE IF EXISTS `threads`");
             $db->query("DROP TABLE IF EXISTS `users`");
+            $db->query("DROP TABLE IF EXISTS `categories`");
             $db->query("DROP TABLE IF EXISTS `logs`");
         }
         
@@ -72,34 +73,7 @@ if (validateToken()) {
             PRIMARY KEY (`categoryid`),
             UNIQUE KEY `category_name` (`categoryname`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-        $db->query("CREATE TABLE IF NOT EXISTS `posts` (
-            `postid` int unsigned NOT NULL AUTO_INCREMENT,
-            `thread` int unsigned NOT NULL,
-            `user` int unsigned NOT NULL,
-            `timestamp` int unsigned NOT NULL,
-            `editedby` int unsigned DEFAULT NULL,
-            `edittime` int unsigned DEFAULT NULL,
-            `deletedby` int unsigned DEFAULT NULL,
-            `content` text NOT NULL,
-            PRIMARY KEY (`postid`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-        $db->query("CREATE TABLE IF NOT EXISTS `threads` (
-            `threadid` int unsigned NOT NULL AUTO_INCREMENT,
-            `title` varchar(255) NOT NULL,
-            `sticky` tinyint(1) NOT NULL DEFAULT '0',
-            `locked` tinyint(1) NOT NULL DEFAULT '0',
-            `pinned` tinyint(1) NOT NULL DEFAULT '0',
-            `draft` tinyint(1) NOT NULL DEFAULT '0',
-            `startuser` int unsigned NOT NULL,
-            `starttime` bigint NOT NULL,
-            `lastpostuser` int unsigned NOT NULL,
-            `lastposttime` bigint NOT NULL,
-            `category` int unsigned NOT NULL,
-            PRIMARY KEY (`threadid`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+        
         $db->query("CREATE TABLE IF NOT EXISTS `users` (
             `userid` int unsigned NOT NULL AUTO_INCREMENT,
             `username` varchar(26) NOT NULL,
@@ -116,6 +90,47 @@ if (validateToken()) {
             PRIMARY KEY (`userid`),
             UNIQUE KEY `user_name` (`username`),
             UNIQUE KEY `user_email` (`email`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `threads` (
+            `threadid` int unsigned NOT NULL AUTO_INCREMENT,
+            `title` varchar(255) NOT NULL,
+            `sticky` tinyint(1) NOT NULL DEFAULT '0',
+            `locked` tinyint(1) NOT NULL DEFAULT '0',
+            `pinned` tinyint(1) NOT NULL DEFAULT '0',
+            `draft` tinyint(1) NOT NULL DEFAULT '0',
+            `startuser` int unsigned NOT NULL,
+            `starttime` bigint NOT NULL,
+            `category` int unsigned NOT NULL,
+            PRIMARY KEY (`threadid`),
+            CONSTRAINT fk_tuser
+              FOREIGN KEY (`startuser`)
+              REFERENCES `users`(`userid`)
+              ON DELETE CASCADE,
+            CONSTRAINT fk_category
+              FOREIGN KEY (`category`)
+              REFERENCES `categories`(`categoryid`)
+              ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $db->query("CREATE TABLE IF NOT EXISTS `posts` (
+            `postid` int unsigned NOT NULL AUTO_INCREMENT,
+            `thread` int unsigned NOT NULL,
+            `user` int unsigned NOT NULL,
+            `timestamp` int unsigned NOT NULL,
+            `editedby` int unsigned DEFAULT NULL,
+            `edittime` int unsigned DEFAULT NULL,
+            `deletedby` int unsigned DEFAULT NULL,
+            `content` text NOT NULL,
+            PRIMARY KEY (`postid`),
+            CONSTRAINT fk_thread
+              FOREIGN KEY (`thread`)
+              REFERENCES `threads`(`threadid`)
+              ON DELETE CASCADE,
+            CONSTRAINT fk_puser
+              FOREIGN KEY (`user`)
+              REFERENCES `users`(`userid`)
+              ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         
         $db->query("CREATE TABLE IF NOT EXISTS `logs` (
