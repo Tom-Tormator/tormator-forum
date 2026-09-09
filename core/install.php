@@ -24,6 +24,7 @@ $dirtest = explode("/", substr($_SERVER["REQUEST_URI"], 0, $querystart));
 $lasti = count($dirtest)-1;
 if (str_starts_with($dirtest[$lasti], "index.php")) array_pop($dirtest);
 $dir = trim(implode("/", $dirtest), "/");
+$config["folder"] = $dir;
 
 // Also figure out the baseURL. Technically HTTP_HOST comes from the HTTP Host header, but the main admin is the one installing and can review for accuracy during and after installation.
 $tempBaseURL = ((($_SERVER["HTTPS"] ?? "") == "on") ? "https://" : "http://") . $_SERVER["HTTP_HOST"] . ($dir ? "/{$dir}" : "");
@@ -159,7 +160,6 @@ if (validateToken()) {
         }
 
         message("Database successfully written.");
-        $config["folder"] = $dir;
         $config["baseURL"] = rtrim(($_POST["baseURL"] ?? $tempBaseURL), "/");
         $config["installed"] = true;
         $config["MySQLServer"] = $_POST["SQLHost"];

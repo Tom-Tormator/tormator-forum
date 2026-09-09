@@ -22,7 +22,9 @@ if ($users_query->num_rows < 1) {
     exit();
 }
 
+addHook("beforeRenderUserlist");
 require "views/userlist.php";
+addHook("afterRenderUserlist");
 
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {

@@ -40,7 +40,7 @@ function redirect($text) {
 
 // Refreshes the current page.
 function refresh($time) {
-	header("Refresh:" . $time . "");
+	header("Refresh: " . $time);
 	exit();
 }
 
@@ -151,7 +151,7 @@ function relativeTime($timestamp) {
 
 function flushConfig() {
     global $config;
-    return file_put_contents("config/config.php", "<?php\n\n if (!defined(\"INDEXED\")) exit;\n\n\$config = " . var_export($config, true) . "\n\n?>");
+    return file_put_contents("config/config.php", "<?php\n\nif (!defined(\"INDEXED\")) exit;\n\n\$config = " . var_export($config, true) . "\n\n?>");
 }
 
 function title() {

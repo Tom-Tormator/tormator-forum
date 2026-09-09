@@ -82,6 +82,11 @@ $title = "";
 
 if (isset($_POST["logout"]) and validateToken()) logout();
 
+// Initialize extensions.
+require "core/extensions.php";
+
+addHook("beforePageLoad");
+
 // Based on the URL, serve the user with a corresponding page.
 if (!$config["installed"]) require "core/install.php";
 elseif (!$url[0]) require "controllers/homepage.php";
@@ -92,5 +97,7 @@ else {
     message("Error: requested page not found.");
     require "controllers/homepage.php";
 }
+
+addHook("afterPageLoad");
 
 ?>

@@ -25,7 +25,7 @@ function active($tab) {
     else return "";
 }
 
-$panelpages = array("newcategory");
+$panelpages = array("newcategory", "extensions");
 $page = "main";
 
 if (isset($url[1])) {

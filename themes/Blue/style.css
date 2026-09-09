@@ -434,3 +434,19 @@ tr:nth-child(even) {
  border: 1px solid #aa8849;
  margin-top: 6px;
 }
+/* Manage extensions page */
+.extensionTiles {
+ display: grid;
+ gap: 4px;
+}
+.extensionTile {
+ background: white;
+ padding: 8px;
+ border-radius: 4px;
+ display: flex;
+}
+.extensionTileRight {
+ margin-left: auto;
+ margin-top: auto;
+ margin-bottom: auto;
+}

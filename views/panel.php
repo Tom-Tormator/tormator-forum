@@ -16,6 +16,7 @@ require "views/header.php";
 ?><div class='paneltabs'>
  <a class='paneltab<?php echo(active("main")); ?>' href='<?php echo(makeURL("panel")); ?>'>Panel</a>
  <a class='paneltab<?php echo(active("newcategory")); ?>' href='<?php echo(makeURL("panel/newcategory")); ?>'>New category</a>
+ <a class='paneltab<?php echo(active("extensions")); ?>' href='<?php echo(makeURL("panel/extensions")); ?>'>Extensions</a>
 </div>
 
 <div class='panelcontent'>
