@@ -69,8 +69,8 @@ if (validateToken()) {
             else {
                 $db->query("COMMIT");
 					
-                message("You have successfully created <a href='" . makeURL("thread/{$threadid}") . "'>your new thread</a>.", "success");
                 $success = true;
+                redirect("thread/{$threadid}");
             }
         }
     }

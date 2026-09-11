@@ -52,13 +52,13 @@ $threads = $db->query("SELECT `threads`.*, p.`user`,p.`timestamp`,u.`username`
 FROM `threads`
 LEFT JOIN `posts` AS p ON p.`thread`=`threads`.`threadid`
 LEFT JOIN `users` AS u ON u.`userid`=p.`user`
-WHERE `category`='" . $db->real_escape_string($url[1]) . "' AND p.`timestamp`=(
+WHERE (`category`='" . $db->real_escape_string($url[1]) . "' OR `pinned`=1) AND p.`timestamp`=(
  SELECT MAX(`timestamp`)
  FROM `posts`
  WHERE `thread`=`threads`.`threadid`
 )
 GROUP BY `threads`.`threadid`
-ORDER BY `threads`.`sticky` DESC, p.`timestamp` DESC
+ORDER BY `threads`.`pinned` DESC, `threads`.`sticky` DESC, p.`timestamp` DESC
 LIMIT " . $config["postsPerPage"] . "
 OFFSET " . $offset . "");
 

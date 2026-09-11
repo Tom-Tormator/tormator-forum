@@ -322,8 +322,6 @@ tr:nth-child(even) {
  margin-bottom: 4px;
 }
 .threadButtons {
- display: flex;
- gap: 2px;
  margin-left: auto;
 }
 .labels {
@@ -341,6 +339,11 @@ tr:nth-child(even) {
 }
 .sticky {
  background: linear-gradient(#169116, #003c00);
+ border: 1px solid #020;
+ color: white;
+}
+.pinned {
+ background: linear-gradient(#970000, #4a0000);
  border: 1px solid #020;
  color: white;
 }

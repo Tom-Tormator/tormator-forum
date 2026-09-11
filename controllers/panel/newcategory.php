@@ -12,7 +12,6 @@
 if (!defined("INDEXED")) exit;
 
 $title = "New category";
-$success = false;
 
 // Disallow non-admins from using this page.
 if ($_SESSION["role"] != "Administrator") {
@@ -45,14 +44,15 @@ if (validateToken()) {
         message("There is already a category with that name.", "error");
     }
     else {
-        $result = $db->query("INSERT INTO `categories` (`categoryname`, `categorydescription`) VALUES ('" . $db->real_escape_string($_POST['cat_name']) . "', '" . $db->real_escape_string($_POST['cat_description']) . "')");
+        $result = $db->query("INSERT INTO `categories` (`categoryname`, `categorydescription`) VALUES ('" . $db->real_escape_string($_POST["cat_name"]) . "', '" . $db->real_escape_string($_POST["cat_description"]) . "')");
     
         if (!$result) {
             message("Something went wrong.", "error");
         }
         else {
             message("New category successfully added. Return to the <a href='" . makeURL("") . "'>main page</a>?", "success");
-            $success = true;
+            unset($_POST["cat_name"]);
+            unset($_POST["cat_description"]);
         }
     }
 }

@@ -231,6 +231,18 @@ if (validateToken()) {
                 refresh(0);
             }
         }
+        elseif (isset($_POST["togglepin"]) and ($_SESSION["role"] == "Administrator")) {
+            // We do bitwise wizardry with xor to flip the bit.
+            $result = $db->query("UPDATE `threads` SET `pinned`=(`pinned` ^ 1) WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+            
+            if (!$result) {
+                message("Sorry, couldn't toggle pinned status.", "error");
+            }
+            
+            else {
+                refresh(0);
+            }
+        }
     }
 }
 
