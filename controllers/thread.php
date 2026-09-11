@@ -110,7 +110,7 @@ if (validateToken()) {
                     // If there are no more posts, delete the thread.
                     if ($lastpost->num_rows < 1) {
                         $result = $db->query("DELETE FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
-                        redirect(makeURL("category/" . $thread["category"]));
+                        redirect("category/" . $thread["category"]);
                     }
                     else {
                         refresh(0);
@@ -191,20 +191,14 @@ if (validateToken()) {
                 message("You don't have permission to do this.", "error");
             }
             else {
+                // Due to the foreign key on delete cascade, we only need to explicitly delete the thread.
                 $result = $db->query("DELETE FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
             
                 if (!$result) {
                     message("Sorry, thread couldn't be deleted.", "error");
                 }
                 else {
-                    $result = $db->query("DELETE FROM `posts` WHERE `thread`='" . $db->real_escape_string($url[1]) . "'");
-                    
-                    if (!$result) {
-                        message("Sorry, the thread's posts couldn't be deleted.", "error");
-                    }
-                    else {
-                        redirect(makeURL("category/" . $thread["category"]));
-                    }
+                    redirect("category/" . $thread["category"]);
                 }
             }
         }
