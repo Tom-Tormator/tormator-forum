@@ -17,12 +17,15 @@ echo("<div class='threadnavbar'>");
 echo("<a class='item' href='" . makeURL("category/{$thread["category"]}") . "'>Back to category</a>");
 echo("<div class='threadButtons'>");
 if (isMod()) {
-    echo "<form method='post'>
+    echo("<form method='post'>
      <input type='hidden' name='token' value='{$_SESSION["token"]}'>
      <button name='deletethread' class='item'>Delete thread</button>
      <button name='togglelock' class='item'>" . ($thread["locked"] ? "Unlock" : "Lock") . "</button>
-     <button name='togglesticky' class='item'>" . ($thread["sticky"] ? "Unsticky" : "Sticky") . "</button>
-    </form>";
+     <button name='togglesticky' class='item'>" . ($thread["sticky"] ? "Unsticky" : "Sticky") . "</button>");
+    if ($_SESSION["role"] == "Administrator") {
+        echo(" <button name='togglepin' class='item'>" . ($thread["pinned"] ? "Unpin" : "Pin") . "</button>");
+    }
+    echo("</form>");
 }
 elseif ($thread["startuser"] == $_SESSION["userid"]) {
     echo "<form method='post'>
@@ -37,11 +40,14 @@ echo("<h2>" . htmlspecialchars($thread["title"], ENT_NOQUOTES) . "</h2>");
 
 // *** Labels. ***
 echo("<div class='labels'>");
-if ($thread["locked"]) {
-    echo '<div class="label locked">Locked</div>';
+if ($thread["pinned"]) {
+    echo '<div class="label pinned">Pinned</div>';
 }
 if ($thread["sticky"]) {
     echo '<div class="label sticky">Sticky</div>';
+}
+if ($thread["locked"]) {
+    echo '<div class="label locked">Locked</div>';
 }
 echo("</div>");
 

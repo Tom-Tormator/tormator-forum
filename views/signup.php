@@ -26,6 +26,14 @@ if (!$_SESSION["signed_in"] and !$success):
  <input type='password' name='user_pass' id='user_pass'>
  <label for='user_pass_check'>Confirm password:</label>
  <input type='password' name='user_pass_check' id='user_pass_check'>
+ <?php
+ if ($config["captcha"] and extension_loaded("gd")):
+ echo("<br><img src='data:image/webp;base64," . generateCaptcha() . "' alt='CAPTCHA image'>
+ <br><span>Type the characters you see in the image.</span>
+ <label for='captcha'>CAPTCHA:</label>
+ <input type='text' name='captcha' id='captcha'>");
+ endif;
+ ?>
  <br>
  <input type='submit' class='item' value='Sign up'>
 </form>

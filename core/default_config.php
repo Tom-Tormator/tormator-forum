@@ -57,7 +57,10 @@ $default_config = array(
     // Time (in seconds) that one must wait before creating another account.
     "timeBetweenSignups" => 300,
     // Max login attempts per IP per hour.
-    "loginsPerHour" => 3
+    "loginsPerHour" => 3,
+    // Whether or not the captcha is enabled.
+    "captcha" => true,
+    "captchaLength" => 6
 );
 
 ?>

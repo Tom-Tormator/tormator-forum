@@ -20,6 +20,53 @@ if ($_SESSION["signed_in"]) {
     exit();
 }
 
+function generateCaptchaChars() {
+    global $config;
+    $chars = "abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789&#*%@?";
+    $captcha = "";
+    for ($i = 0; $i < $config["captchaLength"]; $i++) {
+        $captcha .= $chars[random_int(0, strlen($chars)-1)];
+    }
+    return $captcha;
+}
+
+function generateCaptcha() {
+    $_SESSION["captcha"] = generateCaptchaChars();
+    $length = strlen($_SESSION["captcha"]);
+    
+    $font = random_int(2, 5);
+    $fontwidth = imagefontwidth($font);
+    $fontheight = imagefontheight($font);
+    
+    $width = $fontwidth*$length*2;
+    $height = $fontheight*2;
+    
+    $img = imagecreatetruecolor($width, $height);
+    
+    for ($w = 0; $w < $width; $w++) {
+        for ($h = 0; $h < $height; $h++) {
+            $rand = imagecolorallocate($img, rand(0, 100), rand(0, 100), rand(0, 100));
+            imagesetpixel($img, $w, $h, $rand);
+        }
+    }
+    
+    for ($i = 0; $i < $length; $i++) {
+        $rand = imagecolorallocate($img, rand(200, 255), rand(200, 255), rand(200, 255));
+        imagestring($img, $font, (($i*$fontwidth)*2)+($fontwidth/2)+random_int(-$fontwidth/3, $fontwidth/3), $fontheight/2+random_int(-$fontheight/2, $fontheight/2), $_SESSION["captcha"][$i], $rand);
+    }
+    
+    $img = imagescale($img, $width*3, $height*3);
+    
+    imagefilter($img, IMG_FILTER_SCATTER, 0, 2);
+    imagefilter($img, IMG_FILTER_GAUSSIAN_BLUR);
+    
+    ob_start();
+    imagewebp($img);
+    $result = ob_get_clean();
+    
+    return base64_encode($result);
+}
+
 if (validateToken()) {
     $errors = array();
 
@@ -29,6 +76,12 @@ if (validateToken()) {
     if ($eiv) $errors[] = $eiv;
     $piv = validatePassword($_POST["user_pass"] ?? "", $_POST["user_pass_check"] ?? "");
     if ($piv) $errors[] = $piv;
+    
+    if ($config["captcha"] and extension_loaded("gd")) {
+        if (($_POST["captcha"] ?? "") != $_SESSION["captcha"]) {
+            $errors[] = "Incorrect CAPTCHA response.";
+        }
+    }
     
     $ipHash = hash("sha256", $_SERVER["REMOTE_ADDR"]);
     $accounts = $db->query("SELECT `jointime` FROM `users` WHERE `joinip`='{$ipHash}' OR `ip`='{$ipHash}' ORDER BY `jointime` DESC");

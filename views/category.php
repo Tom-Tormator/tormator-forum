@@ -32,11 +32,14 @@ while ($row = $threads->fetch_assoc()) {
      <td class='leftpart'>
      <b><a href='" . makeURL("thread/{$row['threadid']}") . "'>" . htmlspecialchars($row["title"], ENT_NOQUOTES) . "</a></b>");
     echo(" <div class='labels'>");
-    if ($row["locked"]) {
-        echo '<span class="label locked">Locked</span>';
+    if ($row["pinned"]) {
+        echo '<span class="label pinned">Pinned</span>';
     }
     if ($row["sticky"]) {
         echo '<span class="label sticky">Sticky</span>';
+    }
+    if ($row["locked"]) {
+        echo '<span class="label locked">Locked</span>';
     }
     echo("</div>");
     
@@ -44,11 +47,8 @@ while ($row = $threads->fetch_assoc()) {
     $posts = $posts_query->num_rows;
     
     echo("</td><td class='centered'>{$posts}</td><td>");
-				
-    $uinfo = $db->query("SELECT `username` FROM `users` WHERE `userid`='" . $row["startuser"] . "'");
-    $u = $uinfo->fetch_assoc();
     
-    echo("<a href='" . makeURL("user/{$row["startuser"]}") . "'>" . htmlspecialchars($u["username"], ENT_NOQUOTES) . "</a>");
+    echo("<a href='" . makeURL("user/{$row["startuser"]}") . "'>" . htmlspecialchars($row["username"], ENT_NOQUOTES) . "</a>");
 
     echo("<br><abbr title='" . date('m-d-Y h:i:s A', $row['starttime']) . "'>" . relativeTime($row["starttime"]) . "</abbr>");
 				
