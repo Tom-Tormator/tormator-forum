@@ -113,7 +113,7 @@ function relativeTime($timestamp) {
 	}
 	
 	elseif (($diff >= 7200) and ($diff < 86400)) {
-		return round(($diff / 60) / 60) . " hours ago";
+		return round($diff / 7200) . " hours ago";
 	}
 	
 	elseif (($diff >= 86400) and ($diff < 172800)) {
@@ -121,7 +121,7 @@ function relativeTime($timestamp) {
 	}
 	
 	elseif (($diff >= 172800) and ($diff < 604800)) {
-		return round((($diff / 60) / 60) / 24) . " days ago";
+		return round($diff / 86400) . " days ago";
 	}
 	
 	elseif (($diff >= 604800) and ($diff < 1209600)) {
@@ -129,7 +129,7 @@ function relativeTime($timestamp) {
 	}
 	
 	elseif (($diff >= 1209600) and ($diff < 2629746)) {
-		return round(((($diff / 60) / 60) / 24) / 7) . " weeks ago";
+		return round($diff / 604800) . " weeks ago";
 	}
 	
 	elseif (($diff >= 2629746) and ($diff < 5259492)) {
@@ -137,7 +137,7 @@ function relativeTime($timestamp) {
 	}
 	
 	elseif (($diff >= 5259492) and ($diff < 31556952)) {
-		return round((((($diff / 60) / 60) / 24) / 7) / 4) . " months ago";
+		return round($diff / 2629746) . " months ago";
 	}
 	
 	elseif (($diff >= 31556952) and ($diff < 63113904)) {
@@ -145,7 +145,7 @@ function relativeTime($timestamp) {
 	}
 	
 	elseif ($diff >= 63113904) {
-		return round(((((($diff / 60) / 60) / 24) / 7) / 4) / 12) . " years ago";
+		return round($diff / 31556952) . " years ago";
 	}
 }
 
