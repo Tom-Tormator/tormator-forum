@@ -140,12 +140,12 @@ function relativeTime($timestamp) {
 		return round($diff / 2629746) . " months ago";
 	}
 	
-	elseif (($diff >= 31536000) and ($diff < 63072000)) {
+	elseif (($diff >= 31557600) and ($diff < 63115200)) {
 		return "1 year ago";
 	}
 	
-	elseif ($diff >= 63072000) {
-		return round($diff / 31536000) . " years ago";
+	elseif ($diff >= 63115200) {
+		return round($diff / 31557600) . " years ago";
 	}
 }
 
