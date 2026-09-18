@@ -20,12 +20,13 @@ if (!defined("INDEXED")) exit;
 <body>
  <div id="wrapper">
  <div id="header">
-  <h1><?php echo(htmlspecialchars($config["forumName"], ENT_NOQUOTES)); ?></h1>
-  <?php echo(htmlspecialchars($config["forumDescription"], ENT_NOQUOTES)); ?>
+  <a href='<?php echo(makeURL("")); ?>'>
+   <h1><?php echo(htmlspecialchars($config["forumName"], ENT_NOQUOTES)); ?></h1>
+   <?php echo(htmlspecialchars($config["forumDescription"], ENT_NOQUOTES)); ?>
+  </a>
  </div>
  <?php if ($config["installed"]): ?>
  <div id="menu">
-  <a class="item" href="<?php echo(makeURL("")); ?>">Home</a>
   <a class="item" href="<?php echo(makeURL("userlist")); ?>">Userlist</a>
   <?php if ($_SESSION["signed_in"]): ?>
   <a class="item" href="<?php echo(makeURL("settings")); ?>">Settings</a>

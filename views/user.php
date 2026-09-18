@@ -12,7 +12,9 @@
 if (!defined("INDEXED")) exit;
 
 require "views/header.php";
-			
+
+echo("<div class='user'>");
+
 if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] != $_SESSION["userid"]) and canChangeRole($_SESSION["role"], $user["role"], "Suspended")) {
     $textcolor = contrastText($user["color"]);
     echo "<div class='usertop' style='background: #" . $user["color"] . "; color: #" . $textcolor . ";'>
@@ -46,7 +48,8 @@ echo("<div class='userbottom'>
     <span>Posts: {$posts}</span>
     <span>Threads: {$threads}</span>
     <span>Verified: {$verified}</span>
-    </div>");
+    </div>
+   </div>");
 
 require "views/footer.php";
 

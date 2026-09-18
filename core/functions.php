@@ -113,7 +113,7 @@ function relativeTime($timestamp) {
 	}
 	
 	elseif (($diff >= 7200) and ($diff < 86400)) {
-		return round($diff / 7200) . " hours ago";
+		return round($diff / 3600) . " hours ago";
 	}
 	
 	elseif (($diff >= 86400) and ($diff < 172800)) {
