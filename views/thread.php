@@ -60,15 +60,15 @@ if ($numPosts > $config["postsPerPage"]) {
 echo("<div class='posts'>");			
 while ($row = $posts_query->fetch_assoc()) {
     echo("<div class='post'>");
-    $userinfo = $db->query("SELECT * FROM `users` WHERE `userid`='" . $row["user"] . "'");
+    $userinfo = $db->query("SELECT * FROM `users` WHERE `id`='" . $row["user"] . "'");
 		
 	$u = $userinfo->fetch_assoc();
 	if (isset($row["deletedby"])) {
-		$hider = $db->query("SELECT * FROM `users` WHERE `userid`='" . $row["deletedby"] . "'");
+		$hider = $db->query("SELECT * FROM `users` WHERE `id`='" . $row["deletedby"] . "'");
 		
 		$h = $hider->fetch_assoc();
         echo("<div class='postheader hiddenpost'>
-        <a href='" . makeURL("user/{$u["userid"]}") . "'>" . htmlspecialchars($u["username"], ENT_NOQUOTES) . "</a>&nbsp;
+        <a href='" . makeURL("user/{$u["id"]}") . "'>" . htmlspecialchars($u["username"], ENT_NOQUOTES) . "</a>&nbsp;
         <abbr title='" . date('m-d-Y h:i:s A', $row["timestamp"]) . "'>" . relativeTime($row["timestamp"]) . "</abbr>
         &nbsp;(hidden by&nbsp;<a href='" . makeURL("user/{$row["deletedby"]}") . "'>" . htmlspecialchars($h["username"], ENT_NOQUOTES) . "</a>)");
         if ($_SESSION["signed_in"]
@@ -76,7 +76,7 @@ while ($row = $posts_query->fetch_assoc()) {
             echo("<div class='postbuttons'>
             <form class='postc' method='post'>
              <input type='hidden' name='token' value='{$_SESSION["token"]}'>
-             <button class='item' name='restore' value='{$row["postid"]}'>Restore</button>
+             <button class='item' name='restore' value='{$row["id"]}'>Restore</button>
             </form>
             </div>");
         }
@@ -85,29 +85,29 @@ while ($row = $posts_query->fetch_assoc()) {
 	else {
 	    $textcolor = contrastText($u["color"]);
 		echo("<div style='background-color: #{$u["color"]}; color: #{$textcolor};!important' class='postheader'>");
-		echo("<a style='color: #{$textcolor};' href='" . makeURL("user/{$u["userid"]}") . "'>" . htmlspecialchars($u["username"]) . "</a>&nbsp;
+		echo("<a style='color: #{$textcolor};' href='" . makeURL("user/{$u["id"]}") . "'>" . htmlspecialchars($u["username"]) . "</a>&nbsp;
 		<abbr title='" . date('m-d-Y h:i:s A', $row["timestamp"]) . "'>" . relativeTime($row["timestamp"]) . "</abbr>");
 		if ($_SESSION["signed_in"]
-		and (isMod() or ($u["userid"] == $_SESSION["userid"]))) {
+		and (isMod() or ($u["id"] == $_SESSION["userid"]))) {
 		    echo("<div class='postbuttons'>
 		    <form class='postc' method='post'>
 		     <input type='hidden' name='token' value='{$_SESSION["token"]}'>
-		     <button class='item' name='delete' value='{$row["postid"]}'>Delete</button>
-		     <button class='item' name='hide' value='{$row["postid"]}'>Hide</button>
-		     <button class='item' name='edit' value='{$row["postid"]}'>Edit</button>
+		     <button class='item' name='delete' value='{$row["id"]}'>Delete</button>
+		     <button class='item' name='hide' value='{$row["id"]}'>Hide</button>
+		     <button class='item' name='edit' value='{$row["id"]}'>Edit</button>
 		    </form>
 		    </div>");
 		}
 		
 		if (isset($_POST["edit"])
-		and ($_POST["edit"] == $row["postid"])
+		and ($_POST["edit"] == $row["id"])
 		and $_SESSION["signed_in"]
 		and (isMod() or ($row["user"] == $_SESSION["userid"]))) {
 			echo "</div>
 			<form method='post'>
 			 <input type='hidden' name='token' value='{$_SESSION["token"]}'>
 			 <textarea name='saveedit' class='postTextbox'>" . htmlspecialchars($row["content"], ENT_NOQUOTES) . "</textarea>
-			 <input type='hidden' name='saveeditpostid' value='{$row["postid"]}'>
+			 <input type='hidden' name='saveeditpostid' value='{$row["id"]}'>
 			 <div class='editbuttons'>
 			 <input type='submit' class='item' value='Save edit'>
 			</form>

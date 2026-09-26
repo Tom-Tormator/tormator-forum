@@ -12,7 +12,7 @@
 if (!defined("INDEXED")) exit;
 
 // Start off by making a query using the given userid.
-$user_info = $db->query("SELECT * FROM users WHERE userid='" . $db->real_escape_string($url[1]) . "'");
+$user_info = $db->query("SELECT * FROM `users` WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
 
 if ($user_info->num_rows < 1) {
     message("No such user.", "error");
@@ -39,7 +39,7 @@ if (validateToken()) {
         message("Nothing to change.", "info");
     }
     else {
-        $setrole = $db->query("UPDATE `users` SET `role`='" . $db->real_escape_string($_POST["role"]) . "' WHERE `userid`='" . $db->real_escape_string($url[1]) . "'");
+        $setrole = $db->query("UPDATE `users` SET `role`='" . $db->real_escape_string($_POST["role"]) . "' WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
 
         if (!$setrole) {
             message("Failed to change role.", "error");
@@ -64,7 +64,7 @@ $threads = $threads_query->num_rows;
 			
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {
-    $action = "Viewing: <a href='" . makeURL("user/{$user["userid"]}") . "'>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "'s Profile</a>";
+    $action = "Viewing: <a href='" . makeURL("user/{$user["id"]}") . "'>" . htmlspecialchars($user["username"], ENT_NOQUOTES) . "'s Profile</a>";
     update_last_action($action);
 }
 

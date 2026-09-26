@@ -69,7 +69,7 @@ function validateToken() {
 // Update the user's last action and set their last active time to now.
 function update_last_action($action) {
 	global $db;
-	$result = $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `lastaction`='" . $db->real_escape_string($action) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
+	$result = $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `lastaction`='" . $db->real_escape_string($action) . "' WHERE `id`='" . $_SESSION["userid"] . "'");
 }
 
 // Display a nice message.

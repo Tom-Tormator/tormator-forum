@@ -119,7 +119,7 @@ tr:nth-child(even) {
  background: linear-gradient(#edfbff, #dee9ec);
 }
 tr:nth-child(odd) {
-	background: linear-gradient(#f9f9f9, #ececec);
+	background: linear-gradient(#bae9ff, #9cceff);
 }
 #messages {
  display: grid;
@@ -414,6 +414,27 @@ tr:nth-child(odd) {
  background: wheat;
  padding: 12px;
  margin-top: 6px;
+}
+/* Manage categories page */
+.categoryTiles {
+ display: grid;
+ gap: 4px;
+}
+.categoryTile {
+ display: grid;
+ grid-template-columns: auto auto;
+ align-items: center;
+}
+.categoryTile {
+ background: white;
+ padding: 4px 8px;
+ border-radius: 6px;
+}
+.categoryName {
+ font-weight: bold;
+}
+.categoryTileRight {
+ margin-left: auto;
 }
 /* Manage extensions page */
 .extensionTiles {

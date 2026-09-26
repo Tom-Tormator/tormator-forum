@@ -14,7 +14,7 @@ if (!defined("INDEXED")) exit;
 $title = "Userlist";
 
 // Start off by making a query for our list.
-$users_query = $db->query("SELECT * FROM users ORDER BY userid ASC");
+$users_query = $db->query("SELECT `id`,`username`,`role`,`color`,`lastactive`,`lastaction` FROM `users` ORDER BY `id` ASC");
 
 if ($users_query->num_rows < 1) {
     message("Sadly, there are currently no users on the forum.");

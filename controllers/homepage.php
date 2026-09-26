@@ -16,7 +16,7 @@ if ($_SESSION["signed_in"]) {
 	update_last_action("Viewing: Homepage");
 }
 
-$category_query = $db->query("SELECT * FROM categories");
+$category_query = $db->query("SELECT * FROM `categories`");
 
 if ($category_query->num_rows < 1) {
     message("No categories to display.");

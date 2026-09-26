@@ -21,7 +21,7 @@ if (!$_SESSION["signed_in"]) {
 
 if (validateToken()) {
     if (isset($_POST["newusername"])) {
-        $password_query = $db->query("SELECT `password` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
+        $password_query = $db->query("SELECT `password` FROM `users` WHERE `id`='" . $_SESSION["userid"] . "'");
         $p = $password_query->fetch_assoc();
         
         $errors = array();
@@ -44,7 +44,7 @@ if (validateToken()) {
             }
         }
         else {
-            $result = $db->query("UPDATE `users` SET `username`='" . $db->real_escape_string($_POST["newusername"]) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
+            $result = $db->query("UPDATE `users` SET `username`='" . $db->real_escape_string($_POST["newusername"]) . "' WHERE `id`='" . $_SESSION["userid"] . "'");
             if (!$result) {
                 message("Unable to change username.", "error");
             }
@@ -64,20 +64,20 @@ if (validateToken()) {
             message("Invalid color.");
         }
         else {
-            $db->query("UPDATE `users` SET `color`='" . $db->real_escape_string($color) . "' WHERE `userid`='" . $_SESSION["userid"] . "'");
+            $db->query("UPDATE `users` SET `color`='" . $db->real_escape_string($color) . "' WHERE `id`='" . $_SESSION["userid"] . "'");
             message("Successfully changed color.", "success");
         }
     }
 }
 
-$user_query = $db->query("SELECT `color` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
+$user_query = $db->query("SELECT `color` FROM `users` WHERE `id`='" . $_SESSION["userid"] . "'");
 $user_info = $user_query->fetch_assoc();
 
 require "views/settings.php";
 
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {
-	update_last_action("Viewing: Settings");
+	update_last_action("Changing their settings");
 }
 
 ?>

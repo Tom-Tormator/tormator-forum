@@ -15,7 +15,7 @@ require "views/header.php";
 
 echo("<div class='user'>");
 
-if (isMod() and ($user["userid"] != $config["mainAdmin"]) and ($user["userid"] != $_SESSION["userid"]) and canChangeRole($_SESSION["role"], $user["role"], "Suspended")) {
+if (isMod() and ($user["id"] != $config["mainAdmin"]) and ($user["id"] != $_SESSION["userid"]) and canChangeRole($_SESSION["role"], $user["role"], "Suspended")) {
     $textcolor = contrastText($user["color"]);
     echo "<div class='usertop' style='background: #" . $user["color"] . "; color: #" . $textcolor . ";'>
     <b>" . htmlspecialchars($user["username"]) . "</b> <small>

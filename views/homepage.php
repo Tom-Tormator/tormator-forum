@@ -22,24 +22,24 @@ require "views/header.php";
  </tr>
 <?php
 while ($category = $category_query->fetch_assoc()) {
-	$numthreads = $db->query("SELECT count(*) FROM `threads` WHERE `category`='" . $category["categoryid"] . "'");
+	$numthreads = $db->query("SELECT count(*) FROM `threads` WHERE `category`='" . $category["id"] . "'");
 	$threadCount = $numthreads->fetch_assoc()["count(*)"];
 	// Cleft join to count posts in each category.
-	$numPosts = $db->query("SELECT count(*) FROM `threads` LEFT JOIN `posts` ON `posts`.`thread`=`threads`.`threadid` WHERE `threads`.`category`='" . $category["categoryid"] . "'");
+	$numPosts = $db->query("SELECT count(*) FROM `threads` LEFT JOIN `posts` ON `posts`.`thread`=`threads`.`id` WHERE `threads`.`category`='" . $category["id"] . "'");
 	$postCount = $numPosts->fetch_assoc()["count(*)"];
 	// Cleft join to get the latest post in each category.
-	$lastPostQuery = $db->query("SELECT `posts`.`user`, `posts`.`timestamp` FROM `posts` LEFT JOIN `threads` ON `posts`.`thread`=`threads`.`threadid` WHERE `threads`.`category`='" . $category["categoryid"] . "' ORDER BY
+	$lastPostQuery = $db->query("SELECT `posts`.`user`, `posts`.`timestamp` FROM `posts` LEFT JOIN `threads` ON `posts`.`thread`=`threads`.`id` WHERE `threads`.`category`='" . $category["id"] . "' ORDER BY
 `posts`.`timestamp` DESC LIMIT 1;");
     $lastPost = $lastPostQuery->fetch_assoc();
     if ($lastPost) {
-        $lastPostUserQuery = $db->query("SELECT `username` FROM `users` WHERE `userid`='" . $lastPost["user"] . "'");
+        $lastPostUserQuery = $db->query("SELECT `username` FROM `users` WHERE `id`='" . $lastPost["user"] . "'");
         $lastPostUser = $lastPostUserQuery->fetch_assoc();
     }
 	echo("<tr class='category'>
 	<td class='leftpart'>
-	<a href='" . makeURL("category/" . $category["categoryid"]) . "' class='categoryname'>" . htmlspecialchars($category["categoryname"], ENT_NOQUOTES) . "</a>
+	<a href='" . makeURL("category/" . $category["id"]) . "' class='categoryname'>" . htmlspecialchars($category["name"], ENT_NOQUOTES) . "</a>
 	<br>"
-	. htmlspecialchars($category["categorydescription"], ENT_NOQUOTES) . "
+	. htmlspecialchars($category["description"], ENT_NOQUOTES) . "
 	</td>
 	<td class='centered'>
 	 {$threadCount}

@@ -68,15 +68,16 @@ if (validateToken()) {
         }
         
         $db->query("CREATE TABLE IF NOT EXISTS `categories` (
-            `categoryid` int unsigned NOT NULL AUTO_INCREMENT,
-            `categoryname` varchar(255) NOT NULL,
-            `categorydescription` varchar(255) NOT NULL,
-            PRIMARY KEY (`categoryid`),
-            UNIQUE KEY `category_name` (`categoryname`)
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
+            `name` varchar(255) NOT NULL,
+            `description` varchar(255) NOT NULL,
+            `order` int unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `category_name` (`name`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         
         $db->query("CREATE TABLE IF NOT EXISTS `users` (
-            `userid` int unsigned NOT NULL AUTO_INCREMENT,
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
             `username` varchar(26) NOT NULL,
             `email` varchar(255) NOT NULL,
             `password` varchar(128) NOT NULL,
@@ -88,13 +89,13 @@ if (validateToken()) {
             `joinip` char(64) NOT NULL,
             `ip` char(64) NOT NULL,
             `verified` tinyint(1) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`userid`),
+            PRIMARY KEY (`id`),
             UNIQUE KEY `user_name` (`username`),
             UNIQUE KEY `user_email` (`email`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
         $db->query("CREATE TABLE IF NOT EXISTS `threads` (
-            `threadid` int unsigned NOT NULL AUTO_INCREMENT,
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
             `title` varchar(255) NOT NULL,
             `sticky` tinyint(1) NOT NULL DEFAULT '0',
             `locked` tinyint(1) NOT NULL DEFAULT '0',
@@ -103,19 +104,19 @@ if (validateToken()) {
             `startuser` int unsigned NOT NULL,
             `starttime` bigint NOT NULL,
             `category` int unsigned NOT NULL,
-            PRIMARY KEY (`threadid`),
+            PRIMARY KEY (`id`),
             CONSTRAINT fk_tuser
               FOREIGN KEY (`startuser`)
-              REFERENCES `users`(`userid`)
+              REFERENCES `users`(`id`)
               ON DELETE CASCADE,
             CONSTRAINT fk_category
               FOREIGN KEY (`category`)
-              REFERENCES `categories`(`categoryid`)
+              REFERENCES `categories`(`id`)
               ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
         $db->query("CREATE TABLE IF NOT EXISTS `posts` (
-            `postid` int unsigned NOT NULL AUTO_INCREMENT,
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
             `thread` int unsigned NOT NULL,
             `user` int unsigned NOT NULL,
             `timestamp` int unsigned NOT NULL,
@@ -123,14 +124,14 @@ if (validateToken()) {
             `edittime` int unsigned DEFAULT NULL,
             `deletedby` int unsigned DEFAULT NULL,
             `content` text NOT NULL,
-            PRIMARY KEY (`postid`),
+            PRIMARY KEY (`id`),
             CONSTRAINT fk_thread
               FOREIGN KEY (`thread`)
-              REFERENCES `threads`(`threadid`)
+              REFERENCES `threads`(`id`)
               ON DELETE CASCADE,
             CONSTRAINT fk_puser
               FOREIGN KEY (`user`)
-              REFERENCES `users`(`userid`)
+              REFERENCES `users`(`id`)
               ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         
@@ -145,7 +146,7 @@ if (validateToken()) {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         
         // Make a default category.
-        $db->query("REPLACE INTO `categories` (`categoryname`, `categorydescription`) VALUES ('General', 'Discuss general topics here.')");
+        $db->query("REPLACE INTO `categories` (`name`, `description`, `order`) VALUES ('General', 'Discuss general topics here.', '0')");
         
         $now = time();
         $ip = $db->real_escape_string(hash("sha256", $_SERVER["REMOTE_ADDR"]));

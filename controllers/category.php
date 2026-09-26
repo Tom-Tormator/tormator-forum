@@ -12,7 +12,7 @@
 if (!defined("INDEXED")) exit;
 
 // Get the category information.
-$category = $db->query("SELECT * FROM categories WHERE categoryid='" . $db->real_escape_string($url[1]) . "'");
+$category = $db->query("SELECT * FROM `categories` WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
 
 if ($category->num_rows < 1) {
     http_response_code(404);
@@ -24,7 +24,7 @@ if ($category->num_rows < 1) {
 
 $cat = $category->fetch_assoc();
 
-$title = $cat["categoryname"];
+$title = $cat["name"];
 
 // Find out what page we're on.
 if (isset($url[2]) and is_numeric($url[2])) {
@@ -50,14 +50,14 @@ if ($offset < 0) $offset = 0;
 
 $threads = $db->query("SELECT `threads`.*, p.`user`,p.`timestamp`,u.`username`
 FROM `threads`
-LEFT JOIN `posts` AS p ON p.`thread`=`threads`.`threadid`
-LEFT JOIN `users` AS u ON u.`userid`=p.`user`
+LEFT JOIN `posts` AS p ON p.`thread`=`threads`.`id`
+LEFT JOIN `users` AS u ON u.`id`=p.`user`
 WHERE (`category`='" . $db->real_escape_string($url[1]) . "' OR `pinned`=1) AND p.`timestamp`=(
  SELECT MAX(`timestamp`)
  FROM `posts`
- WHERE `thread`=`threads`.`threadid`
+ WHERE `thread`=`threads`.`id`
 )
-GROUP BY `threads`.`threadid`
+GROUP BY `threads`.`id`
 ORDER BY `threads`.`pinned` DESC, `threads`.`sticky` DESC, p.`timestamp` DESC
 LIMIT " . $config["postsPerPage"] . "
 OFFSET " . $offset . "");

@@ -25,7 +25,7 @@ if (validateToken()) {
     $_POST["category"] = $_POST["category"] ?? "";
     $_POST["postcontent"] = $_POST["postcontent"] ?? "";
     
-    $cat = $db->query("SELECT 1 FROM `categories` WHERE `categoryid`='" . $db->real_escape_string($_POST["category"]) . "'");
+    $cat = $db->query("SELECT 1 FROM `categories` WHERE `id`='" . $db->real_escape_string($_POST["category"]) . "'");
     $delaycheck = $db->query("SELECT 1 FROM `posts` WHERE `user`='" . $_SESSION["userid"] . "' AND `timestamp`>'" . (time() - $config["postDelay"]) . "'");
 		
     if (strlen($_POST["title"]) < 1) {
@@ -83,7 +83,7 @@ if ($cats->num_rows < 1) {
         message("You have not created categories yet.", "error");
     }		
     else {
-        message("Before you can post a topic, you must wait for an admin to create some categories.", "error");
+        message("You must wait for an admin to create some categories before you can post.", "error");
     }
     require "views/error.php";
     exit();

@@ -13,7 +13,7 @@ if (!defined("INDEXED")) exit;
 
 require "views/header.php";
 
-echo("<h2>" . htmlspecialchars($cat["categoryname"], ENT_NOQUOTES) . "</h2>");
+echo("<h2>" . htmlspecialchars($cat["name"], ENT_NOQUOTES) . "</h2>");
 
 if ($numThreads > $config["threadsPerPage"]) {
     renderPagination("category", $currentPage, $pages);
@@ -30,7 +30,7 @@ echo("<table>
 while ($row = $threads->fetch_assoc()) {				
     echo("<tr>
      <td class='leftpart'>
-     <b><a href='" . makeURL("thread/{$row['threadid']}") . "'>" . htmlspecialchars($row["title"], ENT_NOQUOTES) . "</a></b>");
+     <b><a href='" . makeURL("thread/{$row['id']}") . "'>" . htmlspecialchars($row["title"], ENT_NOQUOTES) . "</a></b>");
     echo(" <div class='labels'>");
     if ($row["pinned"]) {
         echo '<span class="label pinned">Pinned</span>';
@@ -43,7 +43,7 @@ while ($row = $threads->fetch_assoc()) {
     }
     echo("</div>");
     
-    $posts_query = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $row["threadid"] . "'");
+    $posts_query = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $row["id"] . "'");
     $posts = $posts_query->num_rows;
     
     echo("</td><td class='centered'>{$posts}</td><td>");

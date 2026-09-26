@@ -12,7 +12,7 @@
 if (!defined("INDEXED")) exit;
 
 // Get the thread's information.
-$thread_query = $db->query("SELECT * FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+$thread_query = $db->query("SELECT * FROM `threads` WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
 $thread = $thread_query->fetch_assoc();
 
 if ($thread_query->num_rows < 1) {
@@ -25,7 +25,7 @@ if ($thread_query->num_rows < 1) {
 
 $title = $thread["title"];
 
-$posts_query = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $thread["threadid"] . "'");
+$posts_query = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $thread["id"] . "'");
 $posts = $posts_query->num_rows;
 
 // Find out what page we're on.
@@ -92,7 +92,7 @@ if (validateToken()) {
         }
         // If the user is requesting to delete a post...
         elseif (isset($_POST["delete"])) {
-            $perm_check = $db->query("SELECT `user` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["delete"]) . "' AND `thread`='" . $db->real_escape_string($url[1]) . "'");
+            $perm_check = $db->query("SELECT `user` FROM `posts` WHERE `id`='" . $db->real_escape_string($_POST["delete"]) . "' AND `thread`='" . $db->real_escape_string($url[1]) . "'");
             if ($perm_check->num_rows < 1) {
                 message("Post does not exist.", "error");
             }
@@ -100,7 +100,7 @@ if (validateToken()) {
                 message("You don't have permission to do this.", "error");
             }
             else {
-                $result = $db->query("DELETE FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["delete"]) . "'");
+                $result = $db->query("DELETE FROM `posts` WHERE `id`='" . $db->real_escape_string($_POST["delete"]) . "'");
             
                 if (!$result) {
                     message("Sorry, post couldn't be deleted.", "error");
@@ -109,7 +109,7 @@ if (validateToken()) {
                     $lastpost = $db->query("SELECT 1 FROM `posts` WHERE `thread`='" . $db->real_escape_string($url[1]) . "'");
                     // If there are no more posts, delete the thread.
                     if ($lastpost->num_rows < 1) {
-                        $result = $db->query("DELETE FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+                        $result = $db->query("DELETE FROM `threads` WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
                         redirect("category/" . $thread["category"]);
                     }
                     else {
@@ -120,7 +120,7 @@ if (validateToken()) {
         }
         // If the user is requesting to hide a post...
         elseif (isset($_POST["hide"])) {
-            $perm_check = $db->query("SELECT `user` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["hide"]) . "'");
+            $perm_check = $db->query("SELECT `user` FROM `posts` WHERE `id`='" . $db->real_escape_string($_POST["hide"]) . "'");
             if ($perm_check->num_rows < 1) {
                 message("Post does not exist.");
             }
@@ -128,7 +128,7 @@ if (validateToken()) {
                 message("You don't have permission to do this.", "error");
             }
             else {
-                $result = $db->query("UPDATE posts SET deletedby='" . $_SESSION["userid"] . "' WHERE postid='" . $db->real_escape_string($_POST["hide"]) . "'");
+                $result = $db->query("UPDATE posts SET `deletedby`='" . $_SESSION["userid"] . "' WHERE `id`='" . $db->real_escape_string($_POST["hide"]) . "'");
             
                 if (!$result) {
                     message("Sorry, post couldn't be hidden.", "error");
@@ -140,7 +140,7 @@ if (validateToken()) {
         }
         // If the user is requesting to restore a post...
         elseif (isset($_POST["restore"])) {
-            $perm_check = $db->query("SELECT `user`, `deletedby` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["restore"]) . "'");
+            $perm_check = $db->query("SELECT `user`, `deletedby` FROM `posts` WHERE `id`='" . $db->real_escape_string($_POST["restore"]) . "'");
             $pc = $perm_check->fetch_assoc();
             if ($perm_check->num_rows < 1) {
                 message("Post does not exist.", "error");
@@ -151,7 +151,7 @@ if (validateToken()) {
                 message("You don't have permission to do this.", "error");
             }
             else {
-                $result = $db->query("UPDATE `posts` SET `deletedby`=NULL WHERE `postid`='" . $db->real_escape_string($_POST["restore"]) . "'");
+                $result = $db->query("UPDATE `posts` SET `deletedby`=NULL WHERE `id`='" . $db->real_escape_string($_POST["restore"]) . "'");
             
                 if (!$result) {
                     message("Sorry, post couldn't be restored.", "error");
@@ -164,7 +164,7 @@ if (validateToken()) {
         // If the user is requesting to save an edit...
         elseif (isset($_POST["saveedit"])) {
             // First make sure the user has permission to edit the specified post.
-            $permission = $db->query("SELECT `user` FROM `posts` WHERE `postid`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
+            $permission = $db->query("SELECT `user` FROM `posts` WHERE `id`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
             $pc = $permission->fetch_assoc();
             if ($permission->num_rows < 1) {
                 message("Post does not exist.", "error");
@@ -173,7 +173,7 @@ if (validateToken()) {
                 message("You don't have permission to edit this post.", "error");
             }
             else {
-                $result = $db->query("UPDATE `posts` SET `content`='" . $db->real_escape_string($_POST["saveedit"]) . "', `editedby`='" . $_SESSION["userid"] . "', `edittime`='" . time() . "' WHERE `postid`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
+                $result = $db->query("UPDATE `posts` SET `content`='" . $db->real_escape_string($_POST["saveedit"]) . "', `editedby`='" . $_SESSION["userid"] . "', `edittime`='" . time() . "' WHERE `id`='" . $db->real_escape_string($_POST["saveeditpostid"]) . "'");
         
                 if (!$result) {
                     message("Sorry, post couldn't be edited.", "error");
@@ -185,14 +185,14 @@ if (validateToken()) {
         }
         // If the user is requesting to delete the thread...
         elseif (isset($_POST["deletethread"])) {
-            $perm_check = $db->query("SELECT `startuser` FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+            $perm_check = $db->query("SELECT `startuser` FROM `threads` WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
             $pc = $perm_check->fetch_assoc();
             if (!isMod() and ($_SESSION["userid"] != $pc["startuser"])) {
                 message("You don't have permission to do this.", "error");
             }
             else {
                 // Due to the foreign key on delete cascade, we only need to explicitly delete the thread.
-                $result = $db->query("DELETE FROM `threads` WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+                $result = $db->query("DELETE FROM `threads` WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
             
                 if (!$result) {
                     message("Sorry, thread couldn't be deleted.", "error");
@@ -204,7 +204,7 @@ if (validateToken()) {
         }
         elseif (isset($_POST["togglelock"]) and isMod()) {
             // We do bitwise wizardry with xor to flip the bit.
-            $result = $db->query("UPDATE `threads` SET `locked`=(`locked` ^ 1) WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+            $result = $db->query("UPDATE `threads` SET `locked`=(`locked` ^ 1) WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
             
             if (!$result) {
                 message("Sorry, couldn't toggle locked status.", "error");
@@ -215,7 +215,7 @@ if (validateToken()) {
         }
         elseif (isset($_POST["togglesticky"]) and isMod()) {
             // We do bitwise wizardry with xor to flip the bit.
-            $result = $db->query("UPDATE `threads` SET `sticky`=(`sticky` ^ 1) WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+            $result = $db->query("UPDATE `threads` SET `sticky`=(`sticky` ^ 1) WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
             
             if (!$result) {
                 message("Sorry, couldn't toggle sticky status.", "error");
@@ -227,7 +227,7 @@ if (validateToken()) {
         }
         elseif (isset($_POST["togglepin"]) and ($_SESSION["role"] == "Administrator")) {
             // We do bitwise wizardry with xor to flip the bit.
-            $result = $db->query("UPDATE `threads` SET `pinned`=(`pinned` ^ 1) WHERE `threadid`='" . $db->real_escape_string($url[1]) . "'");
+            $result = $db->query("UPDATE `threads` SET `pinned`=(`pinned` ^ 1) WHERE `id`='" . $db->real_escape_string($url[1]) . "'");
             
             if (!$result) {
                 message("Sorry, couldn't toggle pinned status.", "error");
@@ -244,7 +244,7 @@ require "views/thread.php";
 
 // If the viewing user is logged in, update their last action.
 if ($_SESSION["signed_in"]) {
-    $action = "Viewing: <a href='" . makeURL("thread/{$thread["threadid"]}") . "'>" . htmlspecialchars($thread["title"], ENT_NOQUOTES) . "</a>";
+    $action = "Viewing: <a href='" . makeURL("thread/{$thread["id"]}") . "'>" . htmlspecialchars($thread["title"], ENT_NOQUOTES) . "</a>";
     update_last_action($action);
 }
 

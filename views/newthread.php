@@ -25,8 +25,8 @@ if (!$success):
  <?php
     while ($cat = $cats->fetch_assoc()) {
         echo "<option ";
-        if (($_POST["category"] ?? "") == $cat["categoryid"]) echo "selected ";
-        echo "value='" . $cat["categoryid"] . "'>" . htmlspecialchars($cat["categoryname"], ENT_NOQUOTES) . "</option>";
+        if (($_POST["category"] ?? "") == $cat["id"]) echo "selected ";
+        echo "value='" . $cat["id"] . "'>" . htmlspecialchars($cat["name"], ENT_NOQUOTES) . "</option>";
     }
  ?>
  </select>

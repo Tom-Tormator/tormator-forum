@@ -57,7 +57,7 @@ if (!isset($_SESSION["token"])) generateToken();
 
 // Check the user's role and ensure their session reflects it accordingly.
 if ($config["installed"] and $_SESSION["signed_in"]) {
-    $rolecheck = $db->query("SELECT `role`, `verified` FROM `users` WHERE `userid`='" . $_SESSION["userid"] . "'");
+    $rolecheck = $db->query("SELECT `role`, `verified` FROM `users` WHERE `id`='" . $_SESSION["userid"] . "'");
     $rc = $rolecheck->fetch_assoc();
     if ($rc["role"] != $_SESSION["role"]) {
         $_SESSION["role"] = $rc["role"];

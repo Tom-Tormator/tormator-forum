@@ -23,7 +23,7 @@ if (validateToken()) {
     $_POST["user_name"] = $_POST["user_name"] ?? "";
     $_POST["user_pass"] = $_POST["user_pass"] ?? "";
     
-    $password_query = $db->query("SELECT `userid`, `username`, `role`, `password` FROM `users` WHERE `username`='" . $db->real_escape_string($_POST["user_name"]) . "'");
+    $password_query = $db->query("SELECT `id`, `username`, `role`, `password` FROM `users` WHERE `username`='" . $db->real_escape_string($_POST["user_name"]) . "'");
     $user_info = $password_query->fetch_assoc();
     
     $iphash = hash("sha256", $_SERVER["REMOTE_ADDR"]);
@@ -59,11 +59,11 @@ if (validateToken()) {
     else {
         session_regenerate_id(true);
         $_SESSION["signed_in"] = true;
-        $_SESSION["userid"] = $user_info["userid"];
+        $_SESSION["userid"] = $user_info["id"];
         $_SESSION["username"] = $user_info["username"];
         $_SESSION["role"] = $user_info["role"];
         
-        $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='{$iphash}' WHERE `userid`='" . $_SESSION["userid"] . "'");
+        $db->query("UPDATE `users` SET `lastactive`='" . time() . "', `ip`='{$iphash}' WHERE `id`='" . $_SESSION["userid"] . "'");
         
         // Log successful login.
         $db->query("INSERT INTO `logs` (`action`, `victim`, `ip`, `useragent`, `timestamp`) VALUES ('login_success', '{$_SESSION["userid"]}', '{$iphash}', '" . $db->real_escape_string(substr($_SERVER["HTTP_USER_AGENT"], 0, 255)) . "', '" . time() . "')");
