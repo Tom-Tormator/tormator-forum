@@ -11,10 +11,10 @@ function getStartTime() {
 
 function getEnd() {
     global $startTime;
-    echo("Page executed in " . ((microtime(true) - $startTime)*1000) . " milliseconds.");
+    echo("<br>Page executed in " . ((microtime(true) - $startTime)*1000) . " milliseconds.");
 }
 
 hook("stats\getStartTime", "beforePageLoad");
-hook("stats\getEnd", "afterPageLoad");
+hook("stats\getEnd", "afterRenderFooter");
 
 ?>

@@ -20,7 +20,7 @@ else {
     $loaded_extensions = array();
 }
 
-function addHook($name) {
+function addHook($name, $args=array()) {
     global $hooks;
     if (!array_key_exists($name, $hooks)) {
         $hooks[$name] = array();
@@ -28,7 +28,7 @@ function addHook($name) {
     // Run any functions that use this hook.
     if (count($hooks[$name])) {
         foreach ($hooks[$name] as $hooked) {
-            call_user_func($hooked);
+            call_user_func_array($hooked, $args);
         }
     }
 }

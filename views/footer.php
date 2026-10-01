@@ -12,7 +12,7 @@
 if (!defined("INDEXED")) exit;
 
 ?></div>
-<div id="footer"><?php echo(htmlspecialchars($config["footer"], ENT_NOQUOTES)); ?></div>
+<div id="footer"><?php addHook("beforeRenderFooter"); echo(htmlspecialchars($config["footer"], ENT_NOQUOTES)); addHook("afterRenderFooter"); ?></div>
 </div>
 </body>
 </html>

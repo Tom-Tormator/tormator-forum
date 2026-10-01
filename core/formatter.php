@@ -14,6 +14,8 @@ if (!defined("INDEXED")) exit;
 function format($string) {
     $string = htmlspecialchars($string);
     
+    addHook("beforeFormat", array(&$string));
+    
     $string = format_bold($string);
     $string = format_italic($string);
     $string = format_underline($string);
@@ -38,6 +40,8 @@ function format($string) {
     $string = format_audio($string);
     // Make newlines work.
     $string = format_newlines($string);
+
+    addHook("afterFormat", array(&$string));
     
     return $string;
 }
