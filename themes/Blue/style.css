@@ -10,7 +10,7 @@
 }
 html {
  font-family: "Georgia", "Garamond", "Times New Roman", "Times", serif;
- font-size: 14pt;
+ font-size: 18px;
 }
 body {
  background-color: #dfdfdf;
@@ -91,9 +91,11 @@ h2 {
 .form input[type='submit'], .form input[type='checkbox'], .form select {
  width: fit-content;
 }
-select, input, textbox {
+select, input, textarea, option {
  border: 1px solid gray;
  border-radius: 3px;
+ font-size: 18px;
+ font-family: inherit;
 }
 table {
  border-collapse: collapse;
@@ -198,6 +200,7 @@ tr:nth-child(odd) {
  font-family: inherit;
  font-size: 16px;
  display: inline-block;
+ font-size: 18px;
 }
 .item:hover {
  text-decoration: underline;
@@ -339,6 +342,9 @@ tr:nth-child(odd) {
 .editbuttons {
  display: flex;
  gap: 1px;
+}
+#newpost {
+ margin: 4px 0 4px 0;
 }
 /* Post formatting */
 .centered {
