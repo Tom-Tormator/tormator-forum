@@ -17,19 +17,47 @@ if (!defined("INDEXED")) exit;
 <?php
 if ($categoriesQuery->num_rows > 0) {
     while ($category = $categoriesQuery->fetch_assoc()) {
-        echo("<div class='categoryTile'>
-         <div>
-          <span class='categoryName'>" . htmlspecialchars($category["name"]) . "</span>
-          <br>
-          <span class='categoryDescription'>" . htmlspecialchars($category["description"]) . "</span>
-         </div>
-         <div class='categoryTileRight'>
-          <form method='post' onsubmit='return confirm(\"Are you sure you want to delete this category and all of its threads?\");'>
-           <input type='hidden' name='token' value='{$_SESSION["token"]}'>
-           <button type='submit' class='item' value='{$category["id"]}' name='delete'>Delete</button>
-          </form>
-         </div>
-        </div>");
+        if (isset($_POST["edit"]) and ($_POST["edit"] == $category["id"])) {
+            echo("<div class='categoryTile'>
+             <div>
+              <form method='post' class='form'>
+               <input type='hidden' name='token' value='{$_SESSION["token"]}'>
+               <label>Name:</label>
+               <input type='text' name='name' value='" . htmlspecialchars($_POST["name"] ?? $category["name"]) . "'>
+               <label>Description:</label>
+               <textarea name='desc'>" . htmlspecialchars($_POST["desc"] ?? $category["description"]) . "</textarea>
+               <input type='hidden' name='id' value='" . $category["id"] . "'>
+               <br>
+               <div>
+                <input type='submit' class='item' value='Save edit' name='saveedit'>
+                <button type='submit' class='item'>Cancel edit</button>
+               </div>
+              </form>
+             </div>
+            </div>");
+        }
+        else {
+            echo("<div class='categoryTile'>
+             <div>
+              <span class='categoryName'>" . htmlspecialchars($category["name"]) . "</span>
+              <br>
+              <span class='categoryDescription'>" . htmlspecialchars($category["description"]) . "</span>
+             </div>
+             <div class='categoryTileRight'>
+              <div>
+               <form method='post'>
+                <button type='submit' class='item' value='{$category["id"]}' name='edit'>Edit</button>
+               </form>
+              </div>
+              <div>
+               <form method='post' onsubmit='return confirm(\"Are you sure you want to delete this category and all of its threads?\");'>
+                <input type='hidden' name='token' value='{$_SESSION["token"]}'>
+                <button type='submit' class='item' value='{$category["id"]}' name='delete'>Delete</button>
+               </form>
+              </div>
+             </div>
+            </div>");
+        }
     }
 }
 else {

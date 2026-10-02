@@ -34,11 +34,17 @@ if (validateToken()) {
         $_POST["cat_description"] = $_POST["cat_description"] ?? "";
         
         // Ensure the name and description aren't empty.
-        if (!$_POST["cat_name"]) {
+        if (strlen($_POST["cat_name"]) < 1) {
             message("The category name cannot be blank.", "error");
         }
-        elseif (!$_POST["cat_description"]) {
+        elseif (strlen($_POST["cat_description"]) < 1) {
             message("The category description cannot be blank.", "error");
+        }
+        elseif (strlen($_POST["cat_name"]) > 32) {
+            message("The category name cannot be longer than 32 characters.", "error");
+        }
+        elseif (strlen($_POST["cat_description"]) > 255) {
+            message("The category description cannot be longer than 255 characters.", "error");
         }
         // Category names must be unique.
         elseif ($db->query("SELECT 1 FROM `categories` WHERE `name`='" . $db->real_escape_string($_POST["cat_name"]) . "'")->num_rows > 0) {
@@ -60,18 +66,60 @@ if (validateToken()) {
         }
     }
     elseif (isset($_POST["delete"])) {
-        $cat = $db->query("SELECT `id` FROM `categories` WHERE `id`='" . $db->real_escape_string($_POST["delete"]) . "'");
-        if ($cat->num_rows < 1) {
-            message("Category not found.", "error");
+        // Just delete the category and let the ON DELETE CASCADE do the rest.
+        $success = $db->query("DELETE FROM `categories` WHERE `id`='" . $db->real_escape_string($_POST["delete"]) . "'");
+        if (!$success) {
+            message("Failed to delete category.", "error");
         }
         else {
-            // Just delete the category and let the ON DELETE CASCADE do the rest.
-            $success = $db->query("DELETE FROM `categories` WHERE `id`='" . $db->real_escape_string($_POST["delete"]) . "'");
-            if (!$success) {
-                message("Failed to delete category.", "error");
+            message("Successfully deleted category.", "success");
+        }
+    }
+    elseif (isset($_POST["saveedit"])) {
+        $_POST["name"] = $_POST["name"] ?? "";
+        $_POST["desc"] = $_POST["desc"] ?? "";
+        $_POST["id"] = $_POST["id"] ?? "";
+        
+        // Do this so the edit form doesn't go away.
+        $_POST["edit"] = $_POST["id"];
+        
+        $catQuery = $db->query("SELECT * FROM `categories` WHERE `id`='" . $db->real_escape_string($_POST["id"]) . "'");
+        $cat = $catQuery->fetch_assoc();
+        
+        // The category must exist.
+        if ($catQuery->num_rows < 1) {
+            message("The category does not exist.", "error");
+        }
+        // Ensure the name and description aren't empty.
+        elseif (strlen($_POST["name"]) < 1) {
+            message("The category name cannot be blank.", "error");
+        }
+        elseif (strlen($_POST["desc"]) < 1) {
+            message("The category description cannot be blank.", "error");
+        }
+        // Impose max length constraints.
+        elseif (strlen($_POST["name"]) > 32) {
+            message("The category name cannot be longer than 32 characters.", "error");
+        }
+        elseif (strlen($_POST["desc"]) > 255) {
+            message("The category description cannot be longer than 255 characters.", "error");
+        }
+        // Category names must be unique.
+        elseif ($db->query("SELECT 1 FROM `categories` WHERE `name`='" . $db->real_escape_string($_POST["name"]) . "' AND `id`<>'" . $db->real_escape_string($_POST["id"]) . "'")->num_rows > 0) {
+            message("There is already a category with that name.", "error");
+        }
+        elseif (($cat["name"] == $_POST["name"]) and ($cat["description"] == $_POST["desc"])) {
+            message("Nothing to change.", "info");
+        }
+        else {
+            $result = $db->query("UPDATE `categories` SET `name`='" . $db->real_escape_string($_POST["name"]) . "', `description`='" . $db->real_escape_string($_POST["desc"]) . "' WHERE `id`='" . $db->real_escape_string($_POST["id"]) . "'");
+        
+            if (!$result) {
+                message("Something went wrong.", "error");
             }
             else {
-                message("Successfully deleted category.", "success");
+                message("Successfully edited category.", "success");
+                unset($_POST["edit"]);
             }
         }
     }

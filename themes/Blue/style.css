@@ -200,6 +200,7 @@ tr:nth-child(odd) {
  font-family: inherit;
  display: inline-block;
  font-size: 18px;
+ max-width: fit-content;
 }
 .item:hover {
  text-decoration: underline;
@@ -441,6 +442,9 @@ tr:nth-child(odd) {
 }
 .categoryTileRight {
  margin-left: auto;
+}
+.categoryTileRight div {
+ display: inline-block;
 }
 /* Manage extensions page */
 .extensionTiles {
